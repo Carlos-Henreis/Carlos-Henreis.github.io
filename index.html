@@ -45,7 +45,8 @@
       @reset-drawer="drawer = $event"
     ></app-navigation-drawer>
     <app-header :folder-image="folderImage"></app-header>
-    <app-projects :folder-image="folderImage"></app-projects>
+    <app-about-me :folder-image="folderImage"></app-projects>
+    <app-projects :folder-file="folderFile"></app-projects>
     <app-footer :folder-image="folderImage"></app-footer>
   </v-app>
 
@@ -382,13 +383,8 @@
 
         }
       },
-      props: {
-        appName: {
-          type: String,
-          default: ''
-        },
-                  
-        folderImage: {
+      props: {   
+        folderFile: {
           type: String,
           default: ''
         }
