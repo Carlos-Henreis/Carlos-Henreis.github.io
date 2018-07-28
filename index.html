@@ -356,61 +356,27 @@
 
     Vue.component('app-about-me', {
       template: `
-        
-        <v-footer
-          dark
-          height="auto"
-        >
-          <v-card
-            class="flex"
-            flat
-            tile
-          >
-            <v-card-title class="blue darken-4">
-              <strong class="subheading">More about me</strong>
-      
-              <v-spacer></v-spacer>
-      
-              <v-btn
-                class="mx-3"
-                dark
-                href="https://www.linkedin.com/in/Carlos-Henreis" target="_blank"
-                icon
-              >
-                <v-icon size="24px">fab fa-linkedin</v-icon>
-              </v-btn>
-            <v-btn
-                class="mx-3"
-                dark
-                href="http://www.github.com/Carlos-Henreis" target="_blank"
-                icon
-              >
-                <v-icon size="24px">fab fa-github</v-icon>
-              </v-btn>
-            <v-btn
-                class="mx-3"
-                dark
-                href="http://lattes.cnpq.br/7813456161666411" target="_blank"
-                icon
-              >
-                <v-icon size="24px">fa fa-graduation-cap</v-icon>
-              </v-btn>
-            <v-btn
-                class="mx-3"
-                dark
-            href="https://www.instagram.com/carloshenrique.reis.35/" target="_blank"
-                icon
-              >
-                <v-icon size="24px">fab fa-instagram</v-icon>
-              </v-btn>
-      
+        <v-flex xs12 sm6 offset-sm3>
+          <v-card>
+            <v-card-title primary-title>
+              <div>
+                <h3 class="headline mb-0">INTRODUCTION</h3>
+                <div>Hi, I'm Carlos. I'm currently working/studying with various things related to computer. Below is a resumé about me (in portuguese)</div>
+                <div>
+                  <v-btn color="primary" dark large>
+                    <v-icon left dark>library_books</v-icon>
+                    View Resumé 
+                  </v-btn>
+                </div>              
+              </div>
             </v-card-title>
-      
-            <v-card-actions class="grey darken-3 justify-center">
-              &copy;2018 — <strong>Vuetify & VueJs</strong>
+
+            <v-card-actions>
+              <v-btn flat color="orange">Share</v-btn>
+              <v-btn flat color="orange">Explore</v-btn>
             </v-card-actions>
           </v-card>
-        </v-footer>`,
+        </v-flex>`,
       data () {
         return {
 
