@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <title>Carlos Henrique Reis</title>
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
@@ -34,19 +35,18 @@
 </head>
 <body>
   <v-app id="app">
-    <app-navbar 
-      :drawer="drawer" 
-      @reset-drawer="drawer = $event" 
-      :app-name="appName" 
+    <app-navbar
+      :drawer="drawer"
+      @reset-drawer="drawer = $event"
+      :app-name="appName"
       :folder-image="folderImage"
     ></app-navbar>
-    <app-navigation-drawer 
+    <app-navigation-drawer
       :drawer="drawer"
       @reset-drawer="drawer = $event"
     ></app-navigation-drawer>
     <app-header :folder-image="folderImage"></app-header>
-    <app-about-me :folder-image="folderImage"></app-projects>
-    <app-projects :folder-file="folderFile"></app-projects>
+    <app-about-me :folder-file="folderFile"></app-about-me>
     <app-footer :folder-image="folderImage"></app-footer>
   </v-app>
 
@@ -55,53 +55,36 @@
   <script>
     Vue.component('app-navbar', {
       template: `
-          <v-toolbar dark>
+          <v-toolbar fixed tabs dark color="grey darken-4">
             <v-toolbar-side-icon class="hidden-lg-and-up" @click="drawerFlag = !drawerFlag"></v-toolbar-side-icon>
-            <v-toolbar-title v-html="appName" />
-            <v-divider
-              class="mx-3"
-              hidden-md-and-down
-              inset
-              vertical
-            ></v-divider>
-        
-            <v-spacer class="hidden-md-and-down"></v-spacer>
-        
+            <v-toolbar-title v-html="appName"/>
+            <v-spacer></v-spacer>
+
             <v-toolbar-items class="hidden-md-and-down">
-              <v-btn flat>
-                About Me
-              </v-btn>
-        
-              <v-divider vertical></v-divider>
-        
-              <v-btn flat>
-                Academic
-              </v-btn>
-        
-              <v-divider vertical></v-divider>
-        
-              <v-btn flat>
-                Professional Experience
-              </v-btn>
-            
-              <v-btn flat>
-                Interests & Skills
-              </v-btn>
-        
-              <v-divider vertical></v-divider>
-        
-              <v-divider vertical></v-divider>
-            
-               <v-btn flat>
-                  Hobbies
-                </v-btn>
-        
-              <v-divider vertical></v-divider>
-          
+              <v-tabs
+                right
+                slot="extension"
+                v-model="active"
+                dark
+                color="grey darken-4"
+              >
+                <v-tabs-slider color="primary"></v-tabs-slider>
+                <v-tab href="#example1">About Me</v-tab>
+                <v-divider vertical></v-divider>
+                <v-tab href="#example">Academic</v-tab>
+                <v-divider vertical></v-divider>
+                <v-tab>Professional Experience</v-tab>
+                <v-divider vertical></v-divider>
+                <v-tab>Interests & Skills</v-tab>
+                <v-divider vertical></v-divider>
+                <v-tab>Hobbies</v-tab>
+                <v-divider vertical></v-divider>
+              </v-tabs>
             </v-toolbar-items>
           </v-toolbar>`,
       data () {
         return {
+          active: null,
         }
       },
       props: {
@@ -140,7 +123,7 @@
       template: `
           <v-navigation-drawer
             v-model="drawerFlag"
-            absolute
+            fixed
             class="hidden-lg-and-up"
             temporary
           >
@@ -237,7 +220,7 @@
 
     Vue.component('app-header', {
       template: `
-        <v-jumbotron :gradient="gradient" dark class="elevation-5" height="none">
+        <v-jumbotron :gradient="gradient" dark class="elevation-5 pt-5" height="none" id="example1">
           <v-container fluid fill-height grid-list-xl>
             <v-layout row wrap align-center>
               <v-flex xs12 md8 text-xs-center my-4>
@@ -292,112 +275,43 @@
       }
     });
 
-    Vue.component('app-projects', {
+    Vue.component('app-about-me', {
       template: `
-      <v-container grid-list-xl>
-        <v-layout wrap>
-          <v-flex xs12 sm6 lg4
-            v-for="project in projects"
-            :key="project.id"
-          >
-            <v-card hover :href="project.url" height="100%">
-              <v-card-media
-                height="330px"
-                :src="getThumbnailUrl(project.name)"
-              ></v-card-media>
-              <v-divider/>
-              <v-card-text>
-                <h3 v-html="project.name" class="mb-2"></h3>
-                <v-chip
-                  class="white--text"
-                  color=info
-                  small
-                  v-for="tag in project.tags"
-                  :key="tag.id"
-                >
-                  {{ tag }}
-                </v-chip>
-              </v-card-text>
+          <v-flex xs12 text-xs-center id="example">
+            <v-card>
+              <v-card-title primary-title>
+                <div>
+                  <h1 class="display-2 mb-3">INTRODUCTION</h1>
+                  <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
+                  <div>
+                    <v-btn
+                      outline
+                      color="primary"
+                      dark large
+                      :href="resumeFile" target="_blank"
+                    >
+                      <v-icon left dark>library_books</v-icon>
+                      View Resumé
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card-title>
             </v-card>
-          </v-flex>
-        </v-layout>
-      </v-container>`,
+          </v-flex>`,
       data () {
         return {
-          projects: [
-            
-          ]
+
         }
       },
       props: {
-        folderImage: {
-          type: String,
-          default: ''
-        }
-      },
-      computed: {
-
-      },
-      methods: {
-        /**
-         * Sample thumbnail file name: `thumb--simon-game.jpg`
-         * @param {String} projectName
-         */
-        getThumbnailUrl (projectName) {
-          return this.folderImage +
-            'thumb--' +
-            projectName.toLowerCase().replace(/\s/g, '-') +
-            '.jpg';
-        }
-      },
-      mounted () {
-
-      }
-    });
-
-    Vue.component('app-about-me', {
-      template: `
-        <v-flex xs12 sm6 offset-sm3>
-          <v-card>
-            <v-card-title primary-title>
-              <div>
-                <h3 class="headline mb-0">INTRODUCTION</h3>
-                <div>Hi, I'm Carlos. I'm currently working/studying with various things related to computer. Below is a resumé about me (in portuguese)</div>
-                <div>
-                  <v-btn color="primary" dark large>
-                    <v-icon left dark>library_books</v-icon>
-                    View Resumé 
-                  </v-btn>
-                </div>              
-              </div>
-            </v-card-title>
-
-            <v-card-actions>
-              <v-btn flat color="orange">Share</v-btn>
-              <v-btn flat color="orange">Explore</v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>`,
-      data () {
-        return {
-
-        }
-      },
-      props: {   
         folderFile: {
           type: String,
           default: ''
         }
       },
       computed: {
-        imageLattes () {
-          return this.folderImage + 'icon-lattes-34.png';
-        },
-        imageGithub () {
-          return this.folderImage + 'icon-github-32.png';
-        },
-        imageLinkedIn () {
-          return this.folderImage + 'icon-linkedin-34.png';
+        resumeFile () {
+          return this.folderFile + 'cv_Carlos.pdf';
         }
       },
       methods: {
@@ -407,10 +321,10 @@
 
       }
     });
-     
+
     Vue.component('app-footer', {
       template: `
-        
+
         <v-footer
           dark
           height="auto"
@@ -422,9 +336,9 @@
           >
             <v-card-title class="blue darken-4">
               <strong class="subheading">More about me</strong>
-      
+
               <v-spacer></v-spacer>
-      
+
               <v-btn
                 class="mx-3"
                 dark
@@ -457,9 +371,9 @@
               >
                 <v-icon size="24px">fab fa-instagram</v-icon>
               </v-btn>
-      
+
             </v-card-title>
-      
+
             <v-card-actions class="grey darken-3 justify-center">
               &copy;2018 — <strong>Vuetify & VueJs</strong>
             </v-card-actions>
@@ -475,7 +389,7 @@
           type: String,
           default: ''
         },
-                  
+
         folderImage: {
           type: String,
           default: ''
@@ -499,14 +413,14 @@
 
       }
     });
-    
+
     new Vue({
       el: '#app',
       data () {
         return {
           appName: 'Portfolio of Carlos Henrique Reis',
           folderImage: 'https://carlos-henreis.github.io/files/images/',
-          folderFiles: 'https://carlos-henreis.github.io/files/',
+          folderFile: 'https://carlos-henreis.github.io/files/',
           drawer: false
         }
       }
