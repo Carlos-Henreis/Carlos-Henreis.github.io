@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Carlos Henrique Reis</title>
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
@@ -35,7 +34,16 @@
 </head>
 <body>
   <v-app id="app">
-    <app-navbar :app-name="appName" :folder-image="folderImage"></app-navbar>
+    <app-navbar 
+      :drawer="drawer" 
+      @reset-drawer="drawer = $event" 
+      :app-name="appName" 
+      :folder-image="folderImage"
+    ></app-navbar>
+    <app-navigation-drawer 
+      :drawer="drawer"
+      @reset-drawer="drawer = $event"
+    ></app-navigation-drawer>
     <app-header :folder-image="folderImage"></app-header>
     <app-projects :folder-image="folderImage"></app-projects>
     <app-footer :folder-image="folderImage"></app-footer>
@@ -46,52 +54,51 @@
   <script>
     Vue.component('app-navbar', {
       template: `
-        <v-toolbar dark>
-          <v-toolbar-title v-html="appName" />
-      
-          <v-divider
-            class="mx-3"
-            inset
-            vertical
-          ></v-divider>
-      
-          <v-spacer></v-spacer>
-      
-          <v-toolbar-items>
-            <v-btn flat>
-              About Me
-            </v-btn>
-      
-            <v-divider vertical></v-divider>
-      
-            <v-btn flat>
-              Academic
-            </v-btn>
-      
-            <v-divider vertical></v-divider>
-      
-            <v-btn flat>
-              Professional Experience
-            </v-btn>
-          
-          <v-btn flat>
-              Interests & Skills
-            </v-btn>
-      
-            <v-divider vertical></v-divider>
-      
-            <v-divider vertical></v-divider>
-          
-           <v-btn flat>
-              Hobbies
-            </v-btn>
-      
-            <v-divider vertical></v-divider>
-       
+          <v-toolbar dark>
+            <v-toolbar-side-icon class="hidden-lg-and-up" @click="drawerFlag = !drawerFlag"></v-toolbar-side-icon>
+            <v-toolbar-title v-html="appName" />
+            <v-divider
+              class="mx-3"
+              hidden-md-and-down
+              inset
+              vertical
+            ></v-divider>
         
-        </v-toolbar-items>
+            <v-spacer class="hidden-md-and-down"></v-spacer>
         
-        </v-toolbar>`,
+            <v-toolbar-items class="hidden-md-and-down">
+              <v-btn flat>
+                About Me
+              </v-btn>
+        
+              <v-divider vertical></v-divider>
+        
+              <v-btn flat>
+                Academic
+              </v-btn>
+        
+              <v-divider vertical></v-divider>
+        
+              <v-btn flat>
+                Professional Experience
+              </v-btn>
+            
+              <v-btn flat>
+                Interests & Skills
+              </v-btn>
+        
+              <v-divider vertical></v-divider>
+        
+              <v-divider vertical></v-divider>
+            
+               <v-btn flat>
+                  Hobbies
+                </v-btn>
+        
+              <v-divider vertical></v-divider>
+          
+            </v-toolbar-items>
+          </v-toolbar>`,
       data () {
         return {
         }
@@ -104,10 +111,123 @@
         folderImage: {
           type: String,
           default: ''
+        },
+        drawer: {
+          type: Boolean,
+          default: false
         }
       },
       methods: {
 
+      },
+      computed: {
+        drawerFlag: {
+          get () {
+            return this.drawer
+          },
+          set (val) {
+            this.$emit('reset-drawer', val)
+          }
+        }
+      },
+      mounted () {
+
+      }
+    });
+
+    Vue.component('app-navigation-drawer', {
+      template: `
+          <v-navigation-drawer
+            v-model="drawerFlag"
+            absolute
+            class="hidden-lg-and-up"
+            temporary
+          >
+            <v-list class="pt-0" dense>
+              <v-divider></v-divider>
+
+              <v-list-tile
+                @click="drawerFlag = !drawerFlag"
+              >
+                <v-list-tile-action>
+                  <v-icon>info</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>About Me</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+
+              <v-list-tile
+                @click="drawerFlag = !drawerFlag"
+              >
+                <v-list-tile-action>
+                  <v-icon>school</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Academic</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+
+              <v-list-tile
+                @click="drawerFlag = !drawerFlag"
+              >
+                <v-list-tile-action>
+                  <v-icon>computer</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Professional Experience</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+
+              <v-list-tile
+                @click="drawerFlag = !drawerFlag"
+              >
+                <v-list-tile-action>
+                  <v-icon>build</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Interests & Skills</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+              <v-list-tile
+                @click="drawerFlag = !drawerFlag"
+              >
+                <v-list-tile-action>
+                  <v-icon>face</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>Hobbies</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+            </v-list>
+          </v-navigation-drawer>`,
+      data () {
+        return {
+        }
+      },
+      props: ["drawer"],
+      methods: {
+
+      },
+      computed: {
+        drawerFlag: {
+          get () {
+            return this.drawer
+          },
+          set (val) {
+            this.$emit('reset-drawer', val)
+          }
+        }
       },
       mounted () {
 
@@ -246,7 +366,7 @@
             flat
             tile
           >
-            <v-card-title class="teal">
+            <v-card-title class="blue darken-4">
               <strong class="subheading">More about me</strong>
       
               <v-spacer></v-spacer>
@@ -331,7 +451,8 @@
       data () {
         return {
           appName: 'Portfolio of Carlos Henrique Reis',
-          folderImage: 'http://carloshenreis.yn.lt/images/'
+          folderImage: 'http://carloshenreis.yn.lt/images/',
+          drawer: false
         }
       }
     });
