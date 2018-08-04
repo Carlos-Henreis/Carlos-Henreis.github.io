@@ -37,7 +37,9 @@
   <v-app id="app">
     <app-navbar
       :drawer="drawer"
+      :active="active"
       @reset-drawer="drawer = $event"
+      @reset-active="active = $event"
       :app-name="appName"
       :folder-image="folderImage"
     ></app-navbar>
@@ -46,7 +48,10 @@
       @reset-drawer="drawer = $event"
     ></app-navigation-drawer>
     <app-header :folder-image="folderImage"></app-header>
-    <app-about-me :folder-file="folderFile"></app-about-me>
+    <app-about-me
+      :folder-file="folderFile"
+      :active="active"
+    ></app-about-me>
     <app-footer :folder-image="folderImage"></app-footer>
   </v-app>
 
@@ -57,21 +62,24 @@
       template: `
           <v-toolbar fixed tabs dark color="grey darken-4">
             <v-toolbar-side-icon class="hidden-lg-and-up" @click="drawerFlag = !drawerFlag"></v-toolbar-side-icon>
-            <v-toolbar-title v-html="appName"/>
+            <v-toolbar-title
+              @click="$vuetify.goTo('#top')"
+              v-html="appName"
+            />
             <v-spacer></v-spacer>
 
             <v-toolbar-items class="hidden-md-and-down">
               <v-tabs
                 right
-                slot="extension"
-                v-model="active"
+                slot="activators"
+                v-model="activeFlag"
                 dark
                 color="grey darken-4"
               >
                 <v-tabs-slider color="primary"></v-tabs-slider>
-                <v-tab href="#example1">About Me</v-tab>
+                <v-tab @click="$vuetify.goTo('#aboutMe')">About Me</v-tab>
                 <v-divider vertical></v-divider>
-                <v-tab href="#example">Academic</v-tab>
+                <v-tab @click="$vuetify.goTo('#academic')">Academic</v-tab>
                 <v-divider vertical></v-divider>
                 <v-tab>Professional Experience</v-tab>
                 <v-divider vertical></v-divider>
@@ -84,7 +92,6 @@
           </v-toolbar>`,
       data () {
         return {
-          active: null,
         }
       },
       props: {
@@ -94,6 +101,10 @@
         },
         folderImage: {
           type: String,
+          default: ''
+        },
+        active: {
+          type: Number,
           default: ''
         },
         drawer: {
@@ -111,6 +122,14 @@
           },
           set (val) {
             this.$emit('reset-drawer', val)
+          }
+        },
+        activeFlag: {
+          get () {
+            return this.active
+          },
+          set (val) {
+            this.$emit('reset-active', val)
           }
         }
       },
@@ -220,7 +239,7 @@
 
     Vue.component('app-header', {
       template: `
-        <v-jumbotron :gradient="gradient" dark class="elevation-5 pt-5" height="none" id="example1">
+        <v-jumbotron id="top" :gradient="gradient" dark class="elevation-5 pt-5" height="none">
           <v-container fluid fill-height grid-list-xl>
             <v-layout row wrap align-center>
               <v-flex xs12 md8 text-xs-center my-4>
@@ -277,7 +296,7 @@
 
     Vue.component('app-about-me', {
       template: `
-          <v-flex xs12 text-xs-center id="example">
+          <v-flex xs12 text-xs-center id="aboutMe">
             <v-card>
               <v-card-title primary-title>
                 <div>
@@ -307,12 +326,64 @@
         folderFile: {
           type: String,
           default: ''
+        },
+        active: {
+          type: Number,
+          default: ''
         }
       },
       computed: {
         resumeFile () {
           return this.folderFile + 'cv_Carlos.pdf';
         }
+      },
+      methods: {
+
+      },
+      mounted () {
+
+      }
+    });
+
+    Vue.component('app-academic', {
+      template: `
+          <v-flex xs12 text-xs-center id="academic">
+            <v-card>
+              <v-card-title primary-title>
+                <div>
+                  <h1 class="display-2 mb-3">INTRODUCTION</h1>
+                  <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
+                  <div>
+                    <v-btn
+                      outline
+                      color="primary"
+                      dark large
+                      :href="resumeFile" target="_blank"
+                    >
+                      <v-icon left dark>library_books</v-icon>
+                      View Resumé
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card-title>
+            </v-card>
+          </v-flex>`,
+      data () {
+        return {
+
+        }
+      },
+      props: {
+        folderFile: {
+          type: String,
+          default: ''
+        },
+        active: {
+          type: Number,
+          default: ''
+        }
+      },
+      computed: {
       },
       methods: {
 
@@ -421,7 +492,8 @@
           appName: 'Portfolio of Carlos Henrique Reis',
           folderImage: 'https://carlos-henreis.github.io/files/images/',
           folderFile: 'https://carlos-henreis.github.io/files/',
-          drawer: false
+          drawer: false,
+          active: null
         }
       }
     });
