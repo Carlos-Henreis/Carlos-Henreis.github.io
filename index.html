@@ -52,7 +52,11 @@
       :folder-file="folderFile"
       :active="active"
     ></app-about-me>
+    <div style="height:500px">
+
+    </div>
     <app-footer :folder-image="folderImage"></app-footer>
+    <app-fab></app-fab>
   </v-app>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -64,6 +68,7 @@
             <v-toolbar-side-icon class="hidden-lg-and-up" @click="drawerFlag = !drawerFlag"></v-toolbar-side-icon>
             <v-toolbar-title
               @click="$vuetify.goTo('#top')"
+              v-ripple
               v-html="appName"
             />
             <v-spacer></v-spacer>
@@ -479,6 +484,46 @@
       },
       methods: {
 
+      },
+      mounted () {
+
+      }
+    });
+
+    Vue.component('app-fab', {
+      template: `
+      <v-fab-transition>
+        <v-btn
+          v-scroll="onScroll"
+          v-show="fab"
+          :style="{
+            bottom: $vuetify.breakpoint.smOnly ? '64px' : ''
+          }"
+          fab
+          dark
+          fixed
+          bottom
+          right
+          color="primary"
+          @click="toTop"
+        >
+          <v-icon>keyboard_arrow_up</v-icon>
+        </v-btn>
+      </v-fab-transition>`,
+      data () {
+        return {
+          fab: false
+        }
+      },
+      methods: {
+        onScroll () {
+          if (typeof window === 'undefined') return
+          const top = window.pageYOffset ||   document.documentElement.offsetTop || 0
+          this.fab = top > 30
+        },
+        toTop () {
+          this.$vuetify.goTo(0)
+        }
       },
       mounted () {
 
