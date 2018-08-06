@@ -35,28 +35,39 @@
 </head>
 <body>
   <v-app id="app">
-    <app-navbar
-      :drawer="drawer"
-      :active="active"
-      @reset-drawer="drawer = $event"
-      @reset-active="active = $event"
-      :app-name="appName"
-      :folder-image="folderImage"
-    ></app-navbar>
-    <app-navigation-drawer
-      :drawer="drawer"
-      @reset-drawer="drawer = $event"
-    ></app-navigation-drawer>
-    <app-header :folder-image="folderImage"></app-header>
-    <app-about-me
-      :folder-file="folderFile"
-      :active="active"
-    ></app-about-me>
-    <div style="height:500px">
+    <div v-scroll="onScroll">
+      <app-navbar
+        :drawer="drawer"
+        :active="active"
+        @reset-drawer="drawer = $event"
+        @reset-active="active = $event"
+        :app-name="appName"
+        :folder-image="folderImage"
+      ></app-navbar>
+      <app-navigation-drawer
+        :drawer="drawer"
+        @reset-drawer="drawer = $event"
+      ></app-navigation-drawer>
+      <app-header :folder-image="folderImage"></app-header>
+      <app-about-me
+        :folder-file="folderFile"
+        :active="active"
+      ></app-about-me>
+      <div id="academic" style="height:500px">
 
+      </div>
+      <div id="professionalExperience" style="height:500px">
+
+      </div>
+      <div id="interests" style="height:500px">
+
+      </div>
+      <div id="hobbies" style="height:500px">
+
+      </div>
+      <app-footer :folder-image="folderImage"></app-footer>
+      <app-fab></app-fab>
     </div>
-    <app-footer :folder-image="folderImage"></app-footer>
-    <app-fab></app-fab>
   </v-app>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -82,15 +93,15 @@
                 color="grey darken-4"
               >
                 <v-tabs-slider color="primary"></v-tabs-slider>
-                <v-tab @click="$vuetify.goTo('#aboutMe')">About Me</v-tab>
+                <v-tab @click="$vuetify.goTo('#aboutMe', { offset: -65 })">About Me</v-tab>
                 <v-divider vertical></v-divider>
-                <v-tab @click="$vuetify.goTo('#academic')">Academic</v-tab>
+                <v-tab @click="$vuetify.goTo('#academic', { offset: -65 })">Academic</v-tab>
                 <v-divider vertical></v-divider>
-                <v-tab>Professional Experience</v-tab>
+                <v-tab @click="$vuetify.goTo('#professionalExperience', { offset: -65 })">Professional Experience</v-tab>
                 <v-divider vertical></v-divider>
-                <v-tab>Interests & Skills</v-tab>
+                <v-tab @click="$vuetify.goTo('#interests', { offset: -65 })">Interests & Skills</v-tab>
                 <v-divider vertical></v-divider>
-                <v-tab>Hobbies</v-tab>
+                <v-tab @click="$vuetify.goTo('#hobbies', { offset: -65 })">Hobbies</v-tab>
                 <v-divider vertical></v-divider>
               </v-tabs>
             </v-toolbar-items>
@@ -155,7 +166,7 @@
               <v-divider></v-divider>
 
               <v-list-tile
-                @click="drawerFlag = !drawerFlag"
+                @click="$vuetify.goTo('#aboutMe', { offset: -55 }); drawerFlag = !drawerFlag"
               >
                 <v-list-tile-action>
                   <v-icon>info</v-icon>
@@ -168,7 +179,7 @@
               <v-divider></v-divider>
 
               <v-list-tile
-                @click="drawerFlag = !drawerFlag"
+                @click="$vuetify.goTo('#academic', { offset: -55 }); drawerFlag = !drawerFlag"
               >
                 <v-list-tile-action>
                   <v-icon>school</v-icon>
@@ -181,7 +192,7 @@
               <v-divider></v-divider>
 
               <v-list-tile
-                @click="drawerFlag = !drawerFlag"
+                @click="$vuetify.goTo('#professionalExperience', { offset: -55 }); drawerFlag = !drawerFlag"
               >
                 <v-list-tile-action>
                   <v-icon>computer</v-icon>
@@ -194,7 +205,7 @@
               <v-divider></v-divider>
 
               <v-list-tile
-                @click="drawerFlag = !drawerFlag"
+                @click="$vuetify.goTo('#interests', { offset: -55 }); drawerFlag = !drawerFlag"
               >
                 <v-list-tile-action>
                   <v-icon>build</v-icon>
@@ -206,7 +217,7 @@
               </v-list-tile>
               <v-divider></v-divider>
               <v-list-tile
-                @click="drawerFlag = !drawerFlag"
+                @click="$vuetify.goTo('#hobbies', { offset: -55 }); drawerFlag = !drawerFlag"
               >
                 <v-list-tile-action>
                   <v-icon>face</v-icon>
@@ -303,7 +314,7 @@
       template: `
           <v-flex xs12 text-xs-center id="aboutMe">
             <v-card>
-              <v-card-title primary-title>
+              <v-card-title primary-title class="justify-center">
                 <div>
                   <h1 class="display-2 mb-3">INTRODUCTION</h1>
                   <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
@@ -538,7 +549,32 @@
           folderImage: 'https://carlos-henreis.github.io/files/images/',
           folderFile: 'https://carlos-henreis.github.io/files/',
           drawer: false,
-          active: null
+          active: 0,
+          list: ['aboutMe', 'academic', 'professionalExperience', 'interests', 'hobbies'],
+          currentOffset: 0
+        }
+      },
+      watch: {
+        currentOffset: function (val) {
+          if (val < this.getItemOffset(this.list[0]) - 65) {
+            this.active = 0
+            return
+          }
+          let that = this
+          let index = this.list.findIndex(item => {
+            return  that.getItemOffset(item) - 65 > val
+          })
+          const lastIndex = this.list.length
+
+          this.active = index > -1 ? index-1 : lastIndex-1
+        }
+      },
+      methods: {
+        getItemOffset (item) {
+          return document.getElementById(item).offsetTop
+        },
+        onScroll () {
+          this.currentOffset = window.pageYOffset
         }
       }
     });
