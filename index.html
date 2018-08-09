@@ -157,6 +157,10 @@
       .right_timeline {
         left: 0%;
       }
+
+      #carlos {
+        display: '' !important;
+      }
     }
   </style>
 
@@ -187,9 +191,9 @@
       <div id="professionalExperience" style="height:500px">
 
       </div>
-      <div id="interests" style="height:500px">
-
-      </div>
+      <app-interests
+        :active="active"
+      ></app-interests>
       <div id="hobbies" style="height:500px">
 
       </div>
@@ -200,6 +204,8 @@
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="https://d3js.org/d3-collection.v1.min.js"></script>
+  <script src="https://d3js.org/d3-array.v1.min.js"></script>
   <script>
     Vue.component('app-navbar', {
       template: `
@@ -222,15 +228,15 @@
               >
                 <v-tabs-slider color="primary"></v-tabs-slider>
                 <v-tab @click="$vuetify.goTo('#aboutMe', { offset: -65 })">About Me</v-tab>
-                <v-divider vertical></v-divider>
+                <v-divider light vertical></v-divider>
                 <v-tab @click="$vuetify.goTo('#academic', { offset: -65 })">Academic</v-tab>
-                <v-divider vertical></v-divider>
+                <v-divider light vertical></v-divider>
                 <v-tab @click="$vuetify.goTo('#professionalExperience', { offset: -65 })">Professional Experience</v-tab>
-                <v-divider vertical></v-divider>
+                <v-divider light vertical></v-divider>
                 <v-tab @click="$vuetify.goTo('#interests', { offset: -65 })">Interests & Skills</v-tab>
-                <v-divider vertical></v-divider>
+                <v-divider light vertical></v-divider>
                 <v-tab @click="$vuetify.goTo('#hobbies', { offset: -65 })">Hobbies</v-tab>
-                <v-divider vertical></v-divider>
+                <v-divider light vertical></v-divider>
               </v-tabs>
             </v-toolbar-items>
           </v-toolbar>`,
@@ -561,6 +567,102 @@
       },
       mounted () {
 
+      }
+    });
+
+    Vue.component('app-interests', {
+      template: `
+          <v-flex xs12 text-xs-center id="interests">
+            <v-card color="deep-purple darken-2" dark>
+              <v-card-title primary-title class="text-xs-center">
+                <v-flex>
+                  <h1 class="display-2 mb-3">INTERESTS & SKILLS</h1>
+                </v-flex>
+              </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md text-xs-center>
+                  <v-layout row wrap>
+                    <v-flex xs12 md6 d-flex>
+                      <v-card color="purple darken-4">
+                        <v-card-title primary-title>
+                          <div>
+                            <h3 class="headline mb-0">INTERESTS</h3>
+                            <div>I've an academic/professional interest in Artificial Intelligence, Operational Research, development of Object Oriented Programming and methods that assist in decision making through Simulation to Discrete Events.</div>
+                          </div>
+                        </v-card-title>
+                      </v-card>
+                    </v-flex>
+                    <v-flex xs12 md6 d-flex>
+                      <v-card color="purple darken-4">
+                        <v-card-title primary-title>
+                          <div>
+                            <h3 class="headline mb-0">SKILLS</h3>
+                            <div>
+                              To demonstrate my skills will show some statistics of my contributions in github. I used gitbub api information regarding my github account.</div>
+                          </div>
+                        </v-card-title>
+                      </v-card>
+                    </v-flex>
+                    <v-flex xs12 d-flex>
+                    <v-card light>
+                      <v-toolbar extended flex color="grey lighten-1" light>
+                        <v-toolbar-items id="carlos">
+                          <v-layout row wrap class="pt-4">
+                            <v-flex x3>
+                              <b><v-icon small>home</v-icon> Pushed to repos</b>
+                            </v-flex>
+                            <v-divider light vertical></v-divider>
+                            <v-flex xs3>
+                              <b><v-icon small>home</v-icon> Main languages</b>
+                            </v-flex>
+                            <v-divider light vertical></v-divider>
+                            <v-flex xs2>
+                              <b><v-icon small>home</v-icon> Total issues</b>
+                            </v-flex>
+                            <v-divider light vertical></v-divider>
+                            <v-flex xs2>
+                              <b><v-icon small>home</v-icon> Total forks</b>
+                            </v-flex>
+                            <v-divider light vertical></v-divider>
+                            <v-flex xs1>
+                              <b><v-icon small>home</v-icon> Total stars</b>
+                            </v-flex>
+                            <v-divider light vertical></v-divider>
+                            <v-flex xs1>
+                              <b><v-icon small>home</v-icon> Followers</b>
+                            </v-flex>
+                            <v-divider light vertical></v-divider>
+                            <v-flex xs1>
+                              <b><v-icon small>home</v-icon> Following</b>
+                            </v-flex>
+                          </v-layout>
+                        </v-toolbar-items>
+                      </v-toolbar>
+                      sdkfjg sldfkjglskdfj glskdfjg
+                    </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card-text>
+            </v-card>
+          </v-flex>`,
+      data () {
+        return {
+
+        }
+      },
+      props: {
+        active: {
+          type: Number,
+          default: ''
+        }
+      },
+      computed: {
+      },
+      methods: {
+
+      },
+      mounted () {
       }
     });
 
