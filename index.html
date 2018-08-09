@@ -206,7 +206,9 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
   <script src="https://d3js.org/d3-collection.v1.min.js"></script>
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
+  <script src="https://justineo.github.io/vue-octicon/dist/vue-octicon.js"></script>
   <script>
+    Vue.component('octicon', VueOcticon);
     Vue.component('app-navbar', {
       template: `
           <v-toolbar fixed tabs dark color="grey darken-4">
@@ -605,39 +607,39 @@
                     </v-flex>
                     <v-flex xs12 d-flex>
                     <v-card light>
-                      <v-toolbar extended flex color="grey lighten-1" light>
-                        <v-toolbar-items id="carlos">
-                          <v-layout row wrap class="pt-4">
-                            <v-flex x3>
-                              <b><v-icon small>home</v-icon> Pushed to repos</b>
+                      <v-flex>
+                        <v-card color="grey lighten-1" light>
+                          <v-layout row wrap>
+                            <v-flex>
+                              <b><v-icon>fa fa-code</v-icon> Pushed to repos</b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex xs3>
-                              <b><v-icon small>home</v-icon> Main languages</b>
+                            <v-flex>
+                              <b><v-icon>fa fa-language</v-icon> Main languages</b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex xs2>
-                              <b><v-icon small>home</v-icon> Total issues</b>
+                            <v-flex>
+                              <b><v-icon>fa fa-bug</v-icon>Total issues</b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex xs2>
-                              <b><v-icon small>home</v-icon> Total forks</b>
+                            <v-flex>
+                              <b><v-icon>fa fa-code-fork</v-icon> Total forks</b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex xs1>
-                              <b><v-icon small>home</v-icon> Total stars</b>
+                            <v-flex>
+                              <b><v-icon>box-stat</v-icon> Total stars</b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex xs1>
-                              <b><v-icon small>home</v-icon> Followers</b>
+                            <v-flex>
+                              <b><v-icon>fa fa-user</v-icon> Followers</b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex xs1>
-                              <b><v-icon small>home</v-icon> Following</b>
+                            <v-flex>
+                              <b><v-icon>fa fa-users</v-icon> Following</b>
                             </v-flex>
                           </v-layout>
-                        </v-toolbar-items>
-                      </v-toolbar>
+                        </v-card>
+                      </v-flex>
                       sdkfjg sldfkjglskdfj glskdfjg
                     </v-card>
                     </v-flex>
