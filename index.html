@@ -5,6 +5,7 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
   <style>
@@ -206,9 +207,9 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
   <script src="https://d3js.org/d3-collection.v1.min.js"></script>
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
-  <script src="https://justineo.github.io/vue-octicon/dist/vue-octicon.js"></script>
+  <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.js"></script>
   <script>
-    Vue.component('octicon', VueOcticon);
     Vue.component('app-navbar', {
       template: `
           <v-toolbar fixed tabs dark color="grey darken-4">
@@ -606,41 +607,76 @@
                       </v-card>
                     </v-flex>
                     <v-flex xs12 d-flex>
-                    <v-card light>
+                    <v-card color="purple darken-4">
                       <v-flex>
-                        <v-card color="grey lighten-1" light>
+                        <v-card color="deep-purple lighten-1" dark>
                           <v-layout row wrap>
-                            <v-flex>
-                              <b><v-icon>fa fa-code</v-icon> Pushed to repos</b>
+                            <v-flex d-flex class="elevation-5">
+                              <b><v-icon small>fa fa-code</v-icon> Pushed to repos <p class="mt-5 headline">{{repos_pushed.length}}</p></b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex>
-                              <b><v-icon>fa fa-language</v-icon> Main languages</b>
+                            <v-flex class="elevation-5">
+                              <b><v-icon small>fa fa-language</v-icon> Main languages <p class="mt-5 headline">{{ languages.length }}</p></b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex>
-                              <b><v-icon>fa fa-bug</v-icon>Total issues</b>
+                            <v-flex class="elevation-5">
+                              <b><v-icon small>fa fa-bug</v-icon> Total issues <p class="mt-5 headline">{{ total_issues }}</p></b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex>
-                              <b><v-icon>fa fa-code-fork</v-icon> Total forks</b>
+                            <v-flex class="elevation-5">
+                              <b><v-icon small>call_split</v-icon> Total forks <p class="mt-5 headline">{{ total_forks }}</p></b>
+                            </v-flex class="elevation-5">
+                            <v-divider light vertical></v-divider>
+                            <v-flex class="elevation-5">
+                              <b><v-icon small>star</v-icon> Total stars <p class="mt-5 headline">{{ total_stars }}</p></b>
+                            </v-flex class="elevation-5">
+                            <v-divider light vertical></v-divider>
+                            <v-flex class="elevation-5">
+                              <b><v-icon small>fa fa-user</v-icon> Followers <p class="mt-5 headline">{{ user.followers }}</p></b>
                             </v-flex>
                             <v-divider light vertical></v-divider>
-                            <v-flex>
-                              <b><v-icon>box-stat</v-icon> Total stars</b>
-                            </v-flex>
-                            <v-divider light vertical></v-divider>
-                            <v-flex>
-                              <b><v-icon>fa fa-user</v-icon> Followers</b>
-                            </v-flex>
-                            <v-divider light vertical></v-divider>
-                            <v-flex>
-                              <b><v-icon>fa fa-users</v-icon> Following</b>
+                            <v-flex class="elevation-5">
+                              <b><v-icon small>fa fa-users</v-icon> Following <p class="mt-5 headline">{{ user.following }}</p></b>
                             </v-flex>
                           </v-layout>
                         </v-card>
                       </v-flex>
-                      sdkfjg sldfkjglskdfj glskdfjg
+                      <v-flex text-lg-left class="ma-3">
+                        <span class="display-1">Summary</span>
+                        <p>Joined GitHub {{ user.created_at|formatDate }}</p>
+                        <div class="padh">
+                          <p v-if="repos_pushed.length > 1">{{ user.name }} has {{ user.public_repos }} repositories on GitHub, the latest {{ repos.length }} with user activity were loaded from GitHub's web service for this evaluation. {{ user.name }} has pushed to <strong>{{ repos_pushed.length }}</strong> of these repositories.
+                            <span v-if="repos_pushed_ratio > .8">This is a high ratio congratulations!</span>
+                            <span v-else-if="repos_pushed_ratio < .4">This is a low ratio.</span>
+                          </p>
+                          <p v-if="languages.length > 1"><strong>{{ languages.length }}</strong> different main languages were identified across all repos pushed to. The main language is the one with the largest amount of code in a given repository, as identified by GitHub's <a href="https://github.com/github/linguist">linguist</a>.
+                            <span v-if="languages.length > 5">Assuming a basic level of proficiency in all these languages {{ user.name }} can be considered hyperpolyglot in the world of computer languages.</span>
+                            <strong>{{ languages[0].key }}</strong> occurs most frequently ‒ {{ languages[0].value }} times ‒ as the main repo language.
+                          </p>
+                          <p v-if="total_forks / repos_pushed.length > 20">The total number of forks across all pushed to repositories indicates that the GitHub projects {{ user.name }} contributes to are actually used by other people as well.</p>
+                        </div>
+                        <div class="padh">
+                          <h2 id="rankings">Rankings</h2>
+                          <div class="row">
+                            <div v-if="languages.length > 1" class="col-3">
+                              <h3>Languages</h3>
+                              <graph id="language-ranking" class="ct-major-third"></graph>
+                            </div>
+                            <div v-if="issues.length > 1" class="col-3">
+                              <h3>Issues</h3>
+                              <graph id="issues-ranking" class="ct-major-third"></graph>
+                            </div>
+                            <div v-if="forks.length > 1" class="col-3">
+                              <h3>Forks</h3>
+                              <graph id="forks-ranking" class="ct-major-third"></graph>
+                            </div>
+                            <div v-if="stars.length > 1" class="col-3">
+                              <h3>Stars</h3>
+                              <graph id="stars-ranking" class="ct-major-third"></graph>
+                            </div>
+                          </div>
+                        </div>
+                      </v-flex>
                     </v-card>
                     </v-flex>
                   </v-layout>
@@ -650,7 +686,19 @@
           </v-flex>`,
       data () {
         return {
-
+          bar_options: {
+            axisX: { onlyInteger: true },
+            axisY: { offset: 100, showGrid: false },
+            horizontalBars: true,
+            reverseData: true
+          },
+          github_user: 'Carlos-Henreis',
+          user: null,
+          git_api: 'https://api.github.com/users/',
+          repos: [],
+          response: {},
+          sort_orders: {},
+          sort_key: ''
         }
       },
       props: {
@@ -660,11 +708,102 @@
         }
       },
       computed: {
+        // Only repos the user actually pushed at, i.e. no forks with no user commits.
+        repos_pushed: function() {
+          return this.repos.filter(d => d.pushed_at > d.created_at)
+        },
+        repos_pushed_ratio: function() {
+          return this.repos.length ? this.repos_pushed.length / this.repos.length : 0
+        },
+        languages: function() {
+          return d3.nest()
+            .key(d => d.language)
+            .rollup(leaves => leaves.length)
+            .entries(this.repos_pushed.filter(d => d.language))
+            .sort((a, b) => b.value - a.value)
+        },
+        issues: function() {
+          return this.repoRanking('open_issues_count')
+        },
+        forks: function() {
+          return this.repoRanking('forks_count')
+        },
+        stars: function() {
+          return this.repoRanking('stargazers_count')
+        },
+        total_forks: function() {
+          return d3.sum(this.forks, d => d.forks_count)
+        },
+        total_issues: function() {
+          return d3.sum(this.issues, d => d.open_issues_count)
+        },
+        total_stars: function() {
+          return d3.sum(this.stars, d => d.stargazers_count)
+        }
       },
       methods: {
+        fetchRepos: function() {
+          let that = this
+          this.$http.get(this.git_api+this.github_user+'/repos?sort=pushed&per_page=100').then(response => {
+            that.response = response
+            that.repos = response['data']
+          })
+        },
+        fetchUser: function() {
+          let that = this
+          this.$http.get(this.git_api+this.github_user).then(response => {
+            that.user = response['data']
+            if (!that.user.name) that.user.name = that.user.login
+          })
+        },
+        order: function(key) {
+          // asc is default, because sort orders are initially unset
+          return this.sort_orders[key] < 0 ? 'dsc' : 'asc'
+        },
+        rankingGraph: function(series, property, selector) {
+          if (series.length) {
+            new Chartist.Bar(selector, {
+              labels: series.map(d => d.name),
+              series: [series.map(d => d[property])]
+            }, this.bar_options)
+          }
+        },
+        repoRanking: function(property) {
+          return this.repos_pushed.filter(d => d[property])
+            .sort((a, b) => b[property] - a[property])
+        },
+        sortBy: function(key, type='number') {
+          let default_value = type === 'string' ? '' : 0
+          this.sort_key = key
+          this.sort_orders[key] = (this.sort_orders[key] || 1) * -1
+          this.repos.sort((a, b) => {
+            let x = a[key] || default_value,
+                y = b[key] || default_value
+            if (type === 'string') {
+                x = x.toLowerCase()
+                y = y.toLowerCase()
+            }
+            return (x === y ? 0 : x > y ? 1 : -1) * this.sort_orders[key]
+          })
+        }
+      },
+      updated: function() {
+        let language_ranking = this.languages.slice(0, 10)
+        new Chartist.Bar('#language-ranking', {
+          labels: language_ranking.map(d => d.key),
+          series: [language_ranking.map(d => d.value)]
+        }, this.bar_options)
 
+        this.rankingGraph(this.issues.slice(0, 10), 'open_issues_count', '#issues-ranking')
+        this.rankingGraph(this.forks.slice(0, 10), 'forks_count', '#forks-ranking')
+        this.rankingGraph(this.stars.slice(0, 10), 'stargazers_count', '#stars-ranking')
       },
       mounted () {
+
+      },
+      created () {
+        this.fetchRepos()
+        this.fetchUser()
       }
     });
 
