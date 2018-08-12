@@ -5,7 +5,6 @@
   <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
   <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.css">
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
 
   <style>
@@ -127,6 +126,11 @@
         border-radius: 6px;
     }
 
+    .linkGit {
+      /* unvisited link */
+      color: white;
+    }
+
     /* Media queries - Responsive timeline on screens less than 600px wide */
     @media screen and (max-width: 1264px) {
       /* Place the timelime to the left */
@@ -158,10 +162,6 @@
       .right_timeline {
         left: 0%;
       }
-
-      #carlos {
-        display: '' !important;
-      }
     }
   </style>
 
@@ -189,15 +189,15 @@
       <app-academic
         :active="active"
       ></app-academic>
-      <div id="professionalExperience" style="height:500px">
-
-      </div>
+      <app-professional-experience
+        :active="active"
+      ></app-professional-experience>
       <app-interests
         :active="active"
       ></app-interests>
-      <div id="hobbies" style="height:500px">
-
-      </div>
+      <app-hobbies
+        :active="active"
+      ></app-hobbies>
       <app-footer :folder-image="folderImage"></app-footer>
       <app-fab></app-fab>
     </div>
@@ -207,7 +207,7 @@
   <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
   <script src="https://d3js.org/d3-collection.v1.min.js"></script>
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/chartist.js/latest/chartist.min.js"></script>
+  <script src="https://unpkg.com/vue-chartjs@2.8.7/dist/vue-chartjs.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.js"></script>
   <script>
     Vue.component('app-navbar', {
@@ -573,6 +573,50 @@
       }
     });
 
+    Vue.component('app-professional-experience', {
+      template: `
+          <v-flex xs12 text-xs-center id="professionalExperience">
+            <v-card color="deep-orange lighten-3" light>
+              <v-card-title primary-title class="justify-center">
+                <div>
+                  <h1 class="display-2 mb-3">PROFESSIONAL EXPERIENCE</h1>
+                  <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
+                  <div>
+                    <v-btn
+                      outline
+                      color="primary"
+                      dark large
+                      :href="resumeFile" target="_blank"
+                    >
+                      <v-icon left dark>library_books</v-icon>
+                      View Resumé
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card-title>
+            </v-card>
+          </v-flex>`,
+      data () {
+        return {
+
+        }
+      },
+      props: {
+        active: {
+          type: Number,
+          default: ''
+        }
+      },
+      computed: {
+      },
+      methods: {
+
+      },
+      mounted () {
+
+      }
+    });
+
     Vue.component('app-interests', {
       template: `
           <v-flex xs12 text-xs-center id="interests">
@@ -643,13 +687,13 @@
                       </v-flex>
                       <v-flex text-lg-left class="ma-3">
                         <span class="display-1">Summary</span>
-                        <p>Joined GitHub {{ user.created_at|formatDate }}</p>
+                        <p>Joined GitHub {{ user.created_at }}</p>
                         <div class="padh">
                           <p v-if="repos_pushed.length > 1">{{ user.name }} has {{ user.public_repos }} repositories on GitHub, the latest {{ repos.length }} with user activity were loaded from GitHub's web service for this evaluation. {{ user.name }} has pushed to <strong>{{ repos_pushed.length }}</strong> of these repositories.
                             <span v-if="repos_pushed_ratio > .8">This is a high ratio congratulations!</span>
                             <span v-else-if="repos_pushed_ratio < .4">This is a low ratio.</span>
                           </p>
-                          <p v-if="languages.length > 1"><strong>{{ languages.length }}</strong> different main languages were identified across all repos pushed to. The main language is the one with the largest amount of code in a given repository, as identified by GitHub's <a href="https://github.com/github/linguist">linguist</a>.
+                          <p v-if="languages.length > 1"><strong>{{ languages.length }}</strong> different main languages were identified across all repos pushed to. The main language is the one with the largest amount of code in a given repository, as identified by GitHub's <b><a class="linkGit" href="https://github.com/github/linguist">linguist</a></b>.
                             <span v-if="languages.length > 5">Assuming a basic level of proficiency in all these languages {{ user.name }} can be considered hyperpolyglot in the world of computer languages.</span>
                             <strong>{{ languages[0].key }}</strong> occurs most frequently ‒ {{ languages[0].value }} times ‒ as the main repo language.
                           </p>
@@ -657,24 +701,40 @@
                         </div>
                         <div class="padh">
                           <h2 id="rankings">Rankings</h2>
-                          <div class="row">
-                            <div v-if="languages.length > 1" class="col-3">
-                              <h3>Languages</h3>
-                              <graph id="language-ranking" class="ct-major-third"></graph>
-                            </div>
-                            <div v-if="issues.length > 1" class="col-3">
-                              <h3>Issues</h3>
-                              <graph id="issues-ranking" class="ct-major-third"></graph>
-                            </div>
-                            <div v-if="forks.length > 1" class="col-3">
-                              <h3>Forks</h3>
-                              <graph id="forks-ranking" class="ct-major-third"></graph>
-                            </div>
-                            <div v-if="stars.length > 1" class="col-3">
-                              <h3>Stars</h3>
-                              <graph id="stars-ranking" class="ct-major-third"></graph>
-                            </div>
-                          </div>
+                          <v-layout row wrap>
+                            <v-flex v-if="languages.length > 1" xs12 md3 class="elevation-2">
+                              <v-card color="deep-purple lighten-1" class="pa-3">
+                                <h3>Languages</h3>
+                                <div class="chart-container">
+                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionLanguages" :options="options"></horizontal-bar-chart>
+                                </div>
+                              </v-card>
+                            </v-flex>
+                            <v-flex v-if="issues.length > 1" xs12 md3 class="elevation-2">
+                              <v-card color="deep-purple lighten-1" class="pa-3">
+                                <h3>Issues</h3>
+                                <div class="chart-container">
+                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionIssues" :options="options"></horizontal-bar-chart>
+                                </div>
+                              </v-card>
+                            </v-flex>
+                            <v-flex v-if="forks.length > 1" xs12 md3 class="elevation-2">
+                              <v-card color="deep-purple lighten-1" class="pa-3">
+                                <h3>Forks</h3>
+                                <div class="chart-container">
+                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionForks" :options="options"></horizontal-bar-chart>
+                                </div>
+                              </v-card>
+                            </v-flex>
+                            <v-flex v-if="stars.length > 1" xs12 md3 class="elevation-2">
+                              <v-card color="deep-purple lighten-1" class="pa-3">
+                                <h3>Stars</h3>
+                                <div class="chart-container">
+                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionStars" :options="options"></horizontal-bar-chart>
+                                </div>
+                              </v-card>
+                            </v-flex>
+                          </v-layout>
                         </div>
                       </v-flex>
                     </v-card>
@@ -686,14 +746,29 @@
           </v-flex>`,
       data () {
         return {
-          bar_options: {
-            axisX: { onlyInteger: true },
-            axisY: { offset: 100, showGrid: false },
-            horizontalBars: true,
-            reverseData: true
+          options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            legend: {
+              display: false
+            },
+            scales: {
+              yAxes: [{
+                maxBarThickness: 10,
+                ticks: {
+                    fontColor: 'white'
+                }
+              }],
+              xAxes: [{
+                ticks: {
+                    fontColor: 'white',
+                    beginAtZero:true
+                }
+              }]
+            }
           },
           github_user: 'Carlos-Henreis',
-          user: null,
+          user: {},
           git_api: 'https://api.github.com/users/',
           repos: [],
           response: {},
@@ -708,6 +783,65 @@
         }
       },
       computed: {
+        datacollectionLanguages: function() {
+          let language_ranking = this.languages
+          let datacollectionLanguage = {
+            labels: [],
+            datasets: []
+          }
+          datacollectionLanguage.labels = language_ranking.map(d => d.key)
+          datacollectionLanguage.datasets = [{
+            label: 'Projects',
+            backgroundColor: '#f87979',
+            data: language_ranking.map(d => d.value)
+          }]
+          return datacollectionLanguage
+        },
+
+        datacollectionIssues: function() {
+          let issues_ranking = this.issues
+          let datacollectionIssues = {
+            labels: [],
+            datasets: []
+          }
+          datacollectionIssues.labels = issues_ranking.map(d => d.name)
+          datacollectionIssues.datasets = [{
+            label: 'Projects',
+            backgroundColor: '#f87979',
+            data: issues_ranking.map(d => d['open_issues_count'])
+          }]
+          return datacollectionIssues
+        },
+        datacollectionForks: function() {
+          let forks_ranking = this.forks
+          let datacollectionForks = {
+            labels: [],
+            datasets: []
+          }
+          datacollectionForks.labels = forks_ranking.map(d => d.name)
+          datacollectionForks.datasets = [{
+            label: 'Projects',
+            backgroundColor: '#f87979',
+            data: forks_ranking.map(d => d['forks_count'])
+          }]
+          return datacollectionForks
+        },
+
+        datacollectionStars: function() {
+          let stars_ranking = this.stars
+          let datacollectionStars = {
+            labels: [],
+            datasets: []
+          }
+          datacollectionStars.labels = stars_ranking.map(d => d.name)
+          datacollectionStars.datasets = [{
+            label: 'Projects',
+            backgroundColor: '#f87979',
+            data: stars_ranking.map(d => d['stargazers_count'])
+          }]
+          return datacollectionStars
+        },
+
         // Only repos the user actually pushed at, i.e. no forks with no user commits.
         repos_pushed: function() {
           return this.repos.filter(d => d.pushed_at > d.created_at)
@@ -760,14 +894,6 @@
           // asc is default, because sort orders are initially unset
           return this.sort_orders[key] < 0 ? 'dsc' : 'asc'
         },
-        rankingGraph: function(series, property, selector) {
-          if (series.length) {
-            new Chartist.Bar(selector, {
-              labels: series.map(d => d.name),
-              series: [series.map(d => d[property])]
-            }, this.bar_options)
-          }
-        },
         repoRanking: function(property) {
           return this.repos_pushed.filter(d => d[property])
             .sort((a, b) => b[property] - a[property])
@@ -788,22 +914,66 @@
         }
       },
       updated: function() {
-        let language_ranking = this.languages.slice(0, 10)
-        new Chartist.Bar('#language-ranking', {
-          labels: language_ranking.map(d => d.key),
-          series: [language_ranking.map(d => d.value)]
-        }, this.bar_options)
-
-        this.rankingGraph(this.issues.slice(0, 10), 'open_issues_count', '#issues-ranking')
-        this.rankingGraph(this.forks.slice(0, 10), 'forks_count', '#forks-ranking')
-        this.rankingGraph(this.stars.slice(0, 10), 'stargazers_count', '#stars-ranking')
-      },
-      mounted () {
-
+        //this.rankingGraph(this.issues.slice(0, 10), 'open_issues_count', '#issues-ranking')
+        //this.rankingGraph(this.forks.slice(0, 10), 'forks_count', '#forks-ranking')
+        //this.rankingGraph(this.stars.slice(0, 10), 'stargazers_count', '#stars-ranking')
       },
       created () {
         this.fetchRepos()
         this.fetchUser()
+      }
+    });
+
+    Vue.component('horizontal-bar-chart', {
+      extends: VueChartJs.HorizontalBar,
+      mixins: [VueChartJs.mixins.reactiveProp],
+      props: ['options'],
+      mounted () {
+        this.renderChart(this.chartData, this.options)
+      }
+    });
+
+    Vue.component('app-hobbies', {
+      template: `
+          <v-flex xs12 text-xs-center id="hobbies">
+            <v-card color="amber lighten-1" light>
+              <v-card-title primary-title class="justify-center">
+                <div>
+                  <h1 class="display-2 mb-3">HOBBIES</h1>
+                  <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
+                  <div>
+                    <v-btn
+                      outline
+                      color="primary"
+                      dark large
+                      :href="resumeFile" target="_blank"
+                    >
+                      <v-icon left dark>library_books</v-icon>
+                      View Resumé
+                    </v-btn>
+                  </div>
+                </div>
+              </v-card-title>
+            </v-card>
+          </v-flex>`,
+      data () {
+        return {
+
+        }
+      },
+      props: {
+        active: {
+          type: Number,
+          default: ''
+        }
+      },
+      computed: {
+      },
+      methods: {
+
+      },
+      mounted () {
+
       }
     });
 
