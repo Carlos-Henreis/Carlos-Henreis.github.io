@@ -209,6 +209,7 @@
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
   <script src="https://unpkg.com/vue-chartjs@2.8.7/dist/vue-chartjs.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/vue-resource/0.7.0/vue-resource.js"></script>
+  <script src="./appFab.vue"></script>
   <script>
     Vue.component('app-navbar', {
       template: `
@@ -454,7 +455,7 @@
               <v-card-title primary-title class="justify-center">
                 <div>
                   <h1 class="display-2 mb-3">INTRODUCTION</h1>
-                  <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
+                  <h2>Hi, I'm Carlos. I'm currently working with web development and studying various things related to computing such as Artificial Intelligence and Optimization of Hyperparameters. Below is a resumé about me (in portuguese)</h2>
                   <div>
                     <v-btn
                       outline
@@ -505,7 +506,7 @@
               <v-card-title primary-title>
                 <div>
                   <h1 class="display-2 mb-3">ACADEMIC</h1>
-                  <h2>I've a bachelor's degree in Computer Science from Universidade Federal de Itajubá – UNIFEI (Federal University of Itajubá). All the activities of my academic life can be seen in the next timeline</h2>
+                  <h2>I have a bachelor's degree in Computer Science from Universidade Federal de Itajubá – UNIFEI (Federal University of Itajubá). All the activities of my academic life can be seen in the next timeline</h2>
                 </div>
                 <div class="timeline">
                   <div class="container_timeline left_timeline">
@@ -516,13 +517,13 @@
                   <div class="container_timeline right_timeline">
                     <div class="content_timeline">
                       <h2>2018</h2>
-                      <p>In the first semester I continued as a monitor, however, in the disciplines of Object Oriented Computing and Web Development. Finally I finished my course final paper related to deep learning and Hyperparameter Optimization.</p>
+                      <p>In the first semester I continued as a teaching assistant, however, in the disciplines of Object Oriented Computing and Web Development. Finally I finished my course final paper related to deep learning and Hyperparameter Optimization.</p>
                     </div>
                   </div>
                   <div class="container_timeline left_timeline">
                     <div class="content_timeline">
                       <h2>2017</h2>
-                      <p>I was discipline monitor of Data Structures. During this period, I started to become interested in machine learning and started researching my course final paper.</p>
+                      <p>I was discipline teaching assistant of Data Structures. During this period, I started to become interested in machine learning and started researching my course final paper.</p>
                     </div>
                   </div>
                   <div class="container_timeline right_timeline">
@@ -540,7 +541,7 @@
                   <div class="container_timeline right_timeline">
                     <div class="content_timeline">
                       <h2>2014</h2>
-                      <p>I entered the course of Information Systems. In addition to doing some volunteer work at CATS (Philanthropic Institution).</p>
+                      <p>I entered the course of Information Systems. In addition to being a volunteer in <b><a class="black--text" href="https://www.familiacats.com.br" target="_blank">CATS</a></b> (Philanthropic Institution).</p>
                     </div>
                   </div>
                   <div class="container_timeline left_timeline">
@@ -576,24 +577,45 @@
     Vue.component('app-professional-experience', {
       template: `
           <v-flex xs12 text-xs-center id="professionalExperience">
-            <v-card color="deep-orange lighten-3" light>
+            <v-card>
               <v-card-title primary-title class="justify-center">
-                <div>
-                  <h1 class="display-2 mb-3">PROFESSIONAL EXPERIENCE</h1>
-                  <h2>Hi, I'm Carlos. I'm currently working/studying with various things related to computing. Below is a resumé about me (in portuguese)</h2>
-                  <div>
-                    <v-btn
-                      outline
-                      color="primary"
-                      dark large
-                      target="_blank"
-                    >
-                      <v-icon left dark>library_books</v-icon>
-                      View Resumé
-                    </v-btn>
-                  </div>
-                </div>
+                  <h1 class="display-2 mb-1">PROFESSIONAL EXPERIENCE</h1>
               </v-card-title>
+              <v-card-text>
+                <v-container grid-list-md text-xs-center>
+                  <v-layout row wrap>
+                    <v-flex xs12 d-flex>
+                      <v-card elevation-4 light>
+                        <v-card-title>
+                          <span class="title text-sm-left">
+                            <b><v-icon left>business_center</v-icon>Software Developer Internship</b></br>
+                            <v-icon left>date_range</v-icon> November 2017 ‒ August 2018</br>
+                            <v-icon left>business</v-icon> Tuuris.com, Itajubá-Brazil</br>
+                          </span>
+                        </v-card-title>
+                        <v-card-text class="ml-3 text-sm-left subheading">
+                          <p>
+                            <v-icon>keyboard_arrow_right</v-icon>
+                            Responsible for development in Tuuris.com. Tuuris is a platform that allows you to customize and compare prices and travel itinerary offered by travel agencies.
+                          </p>
+                          <p>
+                            <v-icon>keyboard_arrow_right</v-icon>
+                            Using the following technologies:
+                            <ul class="ml-3">
+                              <li>Ruby On Rails</li>
+                              <li>GraphQL</li>
+                              <li>VueJs</li>
+                              <li>TDD e BDD</li>
+                              <li>Docker</li>
+                              <li>Mysql</li>
+                            </ul>
+                          </p>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+                  </v-container>
+                </v-layout>
+              </v-card-text>
             </v-card>
           </v-flex>`,
       data () {
@@ -634,7 +656,7 @@
                         <v-card-title primary-title>
                           <div>
                             <h3 class="headline mb-0">INTERESTS</h3>
-                            <div>I've an academic/professional interest in Artificial Intelligence, Operational Research, development of Object Oriented Programming and methods that assist in decision making through Simulation to Discrete Events.</div>
+                            <div>I have an academic/professional interest in Artificial Intelligence, Operational Research, development of Object Oriented Programming and methods that assist in decision making through Simulation of Discrete Events.</div>
                           </div>
                         </v-card-title>
                       </v-card>
@@ -651,93 +673,93 @@
                       </v-card>
                     </v-flex>
                     <v-flex xs12 d-flex>
-                    <v-card color="purple darken-4">
-                      <v-flex>
-                        <v-card color="deep-purple lighten-1" dark>
-                          <v-layout row wrap>
-                            <v-flex d-flex class="elevation-5">
-                              <b><v-icon small>fa fa-code</v-icon> Pushed to repos <p class="mt-5 headline">{{repos_pushed.length}}</p></b>
-                            </v-flex>
-                            <v-divider light vertical></v-divider>
-                            <v-flex class="elevation-5">
-                              <b><v-icon small>fa fa-language</v-icon> Main languages <p class="mt-5 headline">{{ languages.length }}</p></b>
-                            </v-flex>
-                            <v-divider light vertical></v-divider>
-                            <v-flex class="elevation-5">
-                              <b><v-icon small>fa fa-bug</v-icon> Total issues <p class="mt-5 headline">{{ total_issues }}</p></b>
-                            </v-flex>
-                            <v-divider light vertical></v-divider>
-                            <v-flex class="elevation-5">
-                              <b><v-icon small>call_split</v-icon> Total forks <p class="mt-5 headline">{{ total_forks }}</p></b>
-                            </v-flex class="elevation-5">
-                            <v-divider light vertical></v-divider>
-                            <v-flex class="elevation-5">
-                              <b><v-icon small>star</v-icon> Total stars <p class="mt-5 headline">{{ total_stars }}</p></b>
-                            </v-flex class="elevation-5">
-                            <v-divider light vertical></v-divider>
-                            <v-flex class="elevation-5">
-                              <b><v-icon small>fa fa-user</v-icon> Followers <p class="mt-5 headline">{{ user.followers }}</p></b>
-                            </v-flex>
-                            <v-divider light vertical></v-divider>
-                            <v-flex class="elevation-5">
-                              <b><v-icon small>fa fa-users</v-icon> Following <p class="mt-5 headline">{{ user.following }}</p></b>
-                            </v-flex>
-                          </v-layout>
-                        </v-card>
-                      </v-flex>
-                      <v-flex text-lg-left class="ma-3">
-                        <span class="display-1">Summary</span>
-                        <p>Joined GitHub {{ user.created_at }}</p>
-                        <div class="padh">
-                          <p v-if="repos_pushed.length > 1">{{ user.name }} has {{ user.public_repos }} repositories on GitHub, the latest {{ repos.length }} with user activity were loaded from GitHub's web service for this evaluation. {{ user.name }} has pushed to <strong>{{ repos_pushed.length }}</strong> of these repositories.
-                            <span v-if="repos_pushed_ratio > .8">This is a high ratio congratulations!</span>
-                            <span v-else-if="repos_pushed_ratio < .4">This is a low ratio.</span>
-                          </p>
-                          <p v-if="languages.length > 1"><strong>{{ languages.length }}</strong> different main languages were identified across all repos pushed to. The main language is the one with the largest amount of code in a given repository, as identified by GitHub's <b><a class="linkGit" href="https://github.com/github/linguist">linguist</a></b>.
-                            <span v-if="languages.length > 5">Assuming a basic level of proficiency in all these languages {{ user.name }} can be considered hyperpolyglot in the world of computer languages.</span>
-                            <strong>{{ languages[0].key }}</strong> occurs most frequently ‒ {{ languages[0].value }} times ‒ as the main repo language.
-                          </p>
-                          <p v-if="total_forks / repos_pushed.length > 20">The total number of forks across all pushed to repositories indicates that the GitHub projects {{ user.name }} contributes to are actually used by other people as well.</p>
-                        </div>
-                        <div class="padh">
-                          <h2 id="rankings">Rankings</h2>
-                          <v-layout row wrap>
-                            <v-flex v-if="languages.length > 1" xs12 md3 class="elevation-2">
-                              <v-card color="deep-purple lighten-1" class="pa-3">
-                                <h3>Languages</h3>
-                                <div class="chart-container">
-                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionLanguages" :options="options"></horizontal-bar-chart>
-                                </div>
-                              </v-card>
-                            </v-flex>
-                            <v-flex v-if="issues.length > 1" xs12 md3 class="elevation-2">
-                              <v-card color="deep-purple lighten-1" class="pa-3">
-                                <h3>Issues</h3>
-                                <div class="chart-container">
-                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionIssues" :options="options"></horizontal-bar-chart>
-                                </div>
-                              </v-card>
-                            </v-flex>
-                            <v-flex v-if="forks.length > 1" xs12 md3 class="elevation-2">
-                              <v-card color="deep-purple lighten-1" class="pa-3">
-                                <h3>Forks</h3>
-                                <div class="chart-container">
-                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionForks" :options="options"></horizontal-bar-chart>
-                                </div>
-                              </v-card>
-                            </v-flex>
-                            <v-flex v-if="stars.length > 1" xs12 md3 class="elevation-2">
-                              <v-card color="deep-purple lighten-1" class="pa-3">
-                                <h3>Stars</h3>
-                                <div class="chart-container">
-                                  <horizontal-bar-chart :height="216" :chart-data="datacollectionStars" :options="options"></horizontal-bar-chart>
-                                </div>
-                              </v-card>
-                            </v-flex>
-                          </v-layout>
-                        </div>
-                      </v-flex>
-                    </v-card>
+                      <v-card color="purple darken-4">
+                        <v-flex>
+                          <v-card color="deep-purple lighten-1" dark>
+                            <v-layout row wrap>
+                              <v-flex d-flex class="elevation-5">
+                                <b><v-icon small>fa fa-code</v-icon> Pushed to repos <p class="mt-5 headline">{{repos_pushed.length}}</p></b>
+                              </v-flex>
+                              <v-divider light vertical></v-divider>
+                              <v-flex class="elevation-5">
+                                <b><v-icon small>fa fa-language</v-icon> Main languages <p class="mt-5 headline">{{ languages.length }}</p></b>
+                              </v-flex>
+                              <v-divider light vertical></v-divider>
+                              <v-flex class="elevation-5">
+                                <b><v-icon small>fa fa-bug</v-icon> Total issues <p class="mt-5 headline">{{ total_issues }}</p></b>
+                              </v-flex>
+                              <v-divider light vertical></v-divider>
+                              <v-flex class="elevation-5">
+                                <b><v-icon small>call_split</v-icon> Total forks <p class="mt-5 headline">{{ total_forks }}</p></b>
+                              </v-flex class="elevation-5">
+                              <v-divider light vertical></v-divider>
+                              <v-flex class="elevation-5">
+                                <b><v-icon small>star</v-icon> Total stars <p class="mt-5 headline">{{ total_stars }}</p></b>
+                              </v-flex class="elevation-5">
+                              <v-divider light vertical></v-divider>
+                              <v-flex class="elevation-5">
+                                <b><v-icon small>fa fa-user</v-icon> Followers <p class="mt-5 headline">{{ user.followers }}</p></b>
+                              </v-flex>
+                              <v-divider light vertical></v-divider>
+                              <v-flex class="elevation-5">
+                                <b><v-icon small>fa fa-users</v-icon> Following <p class="mt-5 headline">{{ user.following }}</p></b>
+                              </v-flex>
+                            </v-layout>
+                          </v-card>
+                        </v-flex>
+                        <v-flex text-lg-left class="ma-3">
+                          <span class="display-1">Summary</span>
+                          <p>Joined GitHub {{ user.created_at }}</p>
+                          <div class="padh">
+                            <p v-if="repos_pushed.length > 1">{{ user.name }} has {{ user.public_repos }} repositories on GitHub, the latest {{ repos.length }} with user activity were loaded from GitHub's web service for this evaluation. {{ user.name }} has pushed to <strong>{{ repos_pushed.length }}</strong> of these repositories.
+                              <span v-if="repos_pushed_ratio > .8">This is a high ratio congratulations!</span>
+                              <span v-else-if="repos_pushed_ratio < .4">This is a low ratio.</span>
+                            </p>
+                            <p v-if="languages.length > 1"><strong>{{ languages.length }}</strong> different main languages were identified across all repos pushed to. The main language is the one with the largest amount of code in a given repository, as identified by GitHub's <b><a class="linkGit" href="https://github.com/github/linguist">linguist</a></b>.
+                              <span v-if="languages.length > 5">Assuming a basic level of proficiency in all these languages {{ user.name }} can be considered hyperpolyglot in the world of computer languages.</span>
+                              <strong>{{ languages[0].key }}</strong> occurs most frequently ‒ {{ languages[0].value }} times ‒ as the main repo language.
+                            </p>
+                            <p v-if="total_forks / repos_pushed.length > 20">The total number of forks across all pushed to repositories indicates that the GitHub projects {{ user.name }} contributes to are actually used by other people as well.</p>
+                          </div>
+                          <div class="padh">
+                            <h2 id="rankings">Rankings</h2>
+                            <v-layout row wrap>
+                              <v-flex v-if="languages.length > 1" xs12 md3 class="elevation-2">
+                                <v-card color="deep-purple lighten-1" class="pa-3">
+                                  <h3>Languages</h3>
+                                  <div class="chart-container">
+                                    <horizontal-bar-chart :height="216" :chart-data="datacollectionLanguages" :options="options"></horizontal-bar-chart>
+                                  </div>
+                                </v-card>
+                              </v-flex>
+                              <v-flex v-if="issues.length > 1" xs12 md3 class="elevation-2">
+                                <v-card color="deep-purple lighten-1" class="pa-3">
+                                  <h3>Issues</h3>
+                                  <div class="chart-container">
+                                    <horizontal-bar-chart :height="216" :chart-data="datacollectionIssues" :options="options"></horizontal-bar-chart>
+                                  </div>
+                                </v-card>
+                              </v-flex>
+                              <v-flex v-if="forks.length > 1" xs12 md3 class="elevation-2">
+                                <v-card color="deep-purple lighten-1" class="pa-3">
+                                  <h3>Forks</h3>
+                                  <div class="chart-container">
+                                    <horizontal-bar-chart :height="216" :chart-data="datacollectionForks" :options="options"></horizontal-bar-chart>
+                                  </div>
+                                </v-card>
+                              </v-flex>
+                              <v-flex v-if="stars.length > 1" xs12 md3 class="elevation-2">
+                                <v-card color="deep-purple lighten-1" class="pa-3">
+                                  <h3>Stars</h3>
+                                  <div class="chart-container">
+                                    <horizontal-bar-chart :height="216" :chart-data="datacollectionStars" :options="options"></horizontal-bar-chart>
+                                  </div>
+                                </v-card>
+                              </v-flex>
+                            </v-layout>
+                          </div>
+                        </v-flex>
+                      </v-card>
                     </v-flex>
                   </v-layout>
                 </v-container>
@@ -936,7 +958,7 @@
     Vue.component('app-hobbies', {
       template: `
           <v-flex xs12 text-xs-center id="hobbies">
-            <v-card color="amber lighten-1" light>
+            <v-card light>
               <v-card-title primary-title class="justify-center">
                 <div>
                   <h1 class="display-2 mb-3">HOBBIES</h1>
@@ -1030,7 +1052,7 @@
             </v-card-title>
 
             <v-card-actions class="grey darken-3 justify-center">
-              &copy;2018 — <strong>Vuetify & VueJs</strong>
+              <span>Made with <a class="white--text" href="https://vuetifyjs.com" target="_blank">Vuetify</a> & <a class="white--text" href="https://vuejs.org">VueJs</a> by <a class="white--text" href="https://github.com/Carlos-Henreis/">Carlos-Henreis</a> — &copy;2018</span>
             </v-card-actions>
           </v-card>
         </v-footer>`,
@@ -1063,46 +1085,6 @@
       },
       methods: {
 
-      },
-      mounted () {
-
-      }
-    });
-
-    Vue.component('app-fab', {
-      template: `
-      <v-fab-transition>
-        <v-btn
-          v-scroll="onScroll"
-          v-show="fab"
-          :style="{
-            bottom: $vuetify.breakpoint.smOnly ? '64px' : ''
-          }"
-          fab
-          dark
-          fixed
-          bottom
-          right
-          color="primary"
-          @click="toTop"
-        >
-          <v-icon>keyboard_arrow_up</v-icon>
-        </v-btn>
-      </v-fab-transition>`,
-      data () {
-        return {
-          fab: false
-        }
-      },
-      methods: {
-        onScroll () {
-          if (typeof window === 'undefined') return
-          const top = window.pageYOffset ||   document.documentElement.offsetTop || 0
-          this.fab = top > 30
-        },
-        toTop () {
-          this.$vuetify.goTo(0)
-        }
       },
       mounted () {
 
