@@ -459,16 +459,25 @@
               <v-card-title primary-title class="justify-center">
                 <div>
                   <h1 class="display-2 mb-3">INTRODUCTION</h1>
-                  <h2>Hi, I'm Carlos. I'm currently working with web development and studying various things related to computing such as Artificial Intelligence and Optimization of Hyperparameters. Below is a resumé about me (in portuguese)</h2>
+                  <h2>Hi, I'm Carlos. I'm currently working with web development and studying various things related to computing such as Artificial Intelligence and Optimization of Hyperparameters. Below is a resumé about me.</h2>
                   <div>
                     <v-btn
                       outline
                       color="primary"
                       dark large
-                      :href="resumeFile" target="_blank"
+                      :href="resumeFileEn" target="_blank"
                     >
                       <v-icon left dark>library_books</v-icon>
-                      View Resumé
+                      View Resumé (in english)
+                    </v-btn>
+                    <v-btn
+                      outline
+                      color="primary"
+                      dark large
+                      :href="resumeFileBr" target="_blank"
+                    >
+                      <v-icon left dark>library_books</v-icon>
+                      View Resumé (in portuguese)
                     </v-btn>
                   </div>
                 </div>
@@ -491,8 +500,11 @@
         }
       },
       computed: {
-        resumeFile () {
-          return this.folderFile + 'cv_Carlos.pdf';
+        resumeFileEn () {
+          return this.folderFile + 'curriculum-vitae-en-Carlos-Reis.pdf';
+        },
+        resumeFileBr () {
+          return this.folderFile + 'curriculum vitae-br-Carlos-Reis.pdf';
         }
       },
       methods: {
