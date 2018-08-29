@@ -208,7 +208,7 @@
   </v-app>
 
   <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify/dist/vuetify.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/vuetify/1.1.10/vuetify.min.js"></script>
   <script src="https://d3js.org/d3-collection.v1.min.js"></script>
   <script src="https://d3js.org/d3-array.v1.min.js"></script>
   <script src="https://unpkg.com/vue-chartjs@2.8.7/dist/vue-chartjs.full.min.js"></script>
@@ -1017,7 +1017,7 @@
                             :key="index"
                           >
                             <v-card>
-                              <v-img
+                              <v-card-media
                                 aspect-ratio="2.75"
                                 :src="card.images.standard_resolution.url"
                                 height="200px"
@@ -1033,7 +1033,7 @@
                                     </v-flex>
                                   </v-layout>
                                 </v-container>
-                              </v-img>
+                              </v-card-media>
 
                               <v-card-actions>
                                 <v-spacer></v-spacer>
