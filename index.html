@@ -1018,47 +1018,62 @@
 
     Vue.component('app-my-projects', {
       template: `
-          <v-flex xs12 text-xs-center id="projects">
-            <v-card>
-              <v-card-title primary-title class="justify-center">
-                <div>
-                  <h1 class="display-2 mb-3">MY PROJECTS</h1>
-                  <h2>There are some projects that I dedicated recently with some topics of my interest, such as Tensorflow/Pandas, Machine Learning, etc.</h2>
-
-                  <v-flex xs12 sm6 lg4
-                    v-for="project in projects"
-                    :key="project.nome"
-                  >
-                    <v-card hover :href="project.link" height="100%">
-                      <v-card-media
-                        height="330px"
-                        :src="project.image"
-                      >
-                      </v-card-media>
-
-                      <v-divider />
-
-                      <v-card-text>
-                        <h3 v-html="project.nome" class="mb-2"></h3>
-                        <v-chip
-                          class="white--text"
-                          color=info
-                          small
-                          v-for="tag in project.tags"
-                          :key="tag"
+      <v-flex xs12 text-xs-center id="projects">
+        <v-card>
+          <v-card-title primary-title class="text-xs-center">
+            <v-container grid-list-md text-xs-center>
+              <h1 class="display-2 mb-3">MY PROJECTS</h1>
+              <h2>There are some projects that I dedicated recently with some topics of my interest, such as Tensorflow/Pandas, Machine Learning, etc.</h2>
+            </v-container>
+          </v-card-title>
+          <v-card-text>
+            <v-flex xs12>
+              <v-card>
+                <v-container grid-list-md text-xs-center>
+                  <v-layout row wrap>
+                    <v-flex xs12 sm6 lg4
+                      v-for="project in projects"
+                      :key="project.nome"
+                    >
+                      <v-card hover :href="project.link" height="100%" target="_blank">
+                        <v-card-media
+                          height="330px"
+                          :src="project.image"
                         >
-                          {{ tag }}
-                        </v-chip>
-                      </v-card-text>
-                    </v-card>
-                  </v-flex>
+                        </v-card-media>
 
-                </div>
-              </v-card-title>
-            </v-card>
-          </v-flex>`,
+                        <v-divider />
+
+                        <v-card-text>
+                          <h3 v-html="project.nome" class="mb-2"></h3>
+                          <v-chip
+                            class="white--text"
+                            color=info
+                            small
+                            v-for="tag in project.tags"
+                            :key="tag"
+                          >
+                            {{ tag }}
+                          </v-chip>
+                        </v-card-text>
+                        <v-slide-y-transition>
+                          <v-card-text v-show="show">
+                            <h4>More info</h4>
+                            {{project.description}}
+                          </v-card-text>
+                        </v-slide-y-transition>
+                      </v-card>
+                    </v-flex>
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </v-flex>
+          </v-card-text>
+        </v-card>
+      </v-flex>`,
       data () {
         return {
+          show: true,
           projects: [
             {
               nome: 'Optimization of Hyperparameters in Deep Neural Networks',
@@ -1099,12 +1114,24 @@
               type: 'Code',
               link: 'https://github.com/Carlos-Henreis/galaxia',
               image: this.folderImage + 'galaxia.gif'
+            },
+            {
+              nome: 'Scroll Back To Top Button with vuetify',
+              description: 'This example demonstrates how to create a "scroll to top" button that becomes visible when the user starts to scroll the page.',
+              tags: ['Vuetify', 'Vuejs', 'Material Design'],
+              type: 'code',
+              link: 'https://codepen.io/carlos-henreis/pen/vzXKBJ',
+              image: this.folderImage + 'vue-elevator.gif'
             }
           ]
         }
       },
       props: {
         folderFile: {
+          type: String,
+          default: ''
+        },
+        folderImage: {
           type: String,
           default: ''
         },
