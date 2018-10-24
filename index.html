@@ -199,6 +199,11 @@
       <app-interests
         :active="active"
       ></app-interests>
+      <app-my-projects
+        :folder-image="folderImage"
+        :folder-file="folderFile"
+        :active="active"
+      ></app-my-projects>
       <app-hobbies
         :active="active"
       ></app-hobbies>
@@ -242,6 +247,8 @@
                 <v-tab @click="$vuetify.goTo('#professionalExperience', { offset: -65 })">Professional Experience</v-tab>
                 <v-divider light vertical></v-divider>
                 <v-tab @click="$vuetify.goTo('#interests', { offset: -65 })">Interests & Skills</v-tab>
+                <v-divider light vertical></v-divider>
+                <v-tab @click="$vuetify.goTo('#projects', { offset: -65 })">My Projects</v-tab>
                 <v-divider light vertical></v-divider>
                 <v-tab @click="$vuetify.goTo('#hobbies', { offset: -65 })">Hobbies</v-tab>
                 <v-divider light vertical></v-divider>
@@ -355,6 +362,18 @@
 
                 <v-list-tile-content>
                   <v-list-tile-title>Interests & Skills</v-list-tile-title>
+                </v-list-tile-content>
+              </v-list-tile>
+              <v-divider></v-divider>
+              <v-list-tile
+                @click="$vuetify.goTo('#projects', { offset: -55 }); drawerFlag = !drawerFlag"
+              >
+                <v-list-tile-action>
+                  <v-icon>folder_special</v-icon>
+                </v-list-tile-action>
+
+                <v-list-tile-content>
+                  <v-list-tile-title>My Projects</v-list-tile-title>
                 </v-list-tile-content>
               </v-list-tile>
               <v-divider></v-divider>
@@ -997,6 +1016,119 @@
       }
     });
 
+    Vue.component('app-my-projects', {
+      template: `
+          <v-flex xs12 text-xs-center id="projects">
+            <v-card>
+              <v-card-title primary-title class="justify-center">
+                <div>
+                  <h1 class="display-2 mb-3">MY PROJECTS</h1>
+                  <h2>There are some projects that I dedicated recently with some topics of my interest, such as Tensorflow/Pandas, Machine Learning, etc.</h2>
+
+                  <v-flex xs12 sm6 lg4
+                    v-for="project in projects"
+                    :key="project.nome"
+                  >
+                    <v-card hover :href="project.link" height="100%">
+                      <v-card-media
+                        height="330px"
+                        :src="project.image"
+                      >
+                      </v-card-media>
+
+                      <v-divider />
+
+                      <v-card-text>
+                        <h3 v-html="project.nome" class="mb-2"></h3>
+                        <v-chip
+                          class="white--text"
+                          color=info
+                          small
+                          v-for="tag in project.tags"
+                          :key="tag"
+                        >
+                          {{ tag }}
+                        </v-chip>
+                      </v-card-text>
+                    </v-card>
+                  </v-flex>
+
+                </div>
+              </v-card-title>
+            </v-card>
+          </v-flex>`,
+      data () {
+        return {
+          projects: [
+            {
+              nome: 'Optimization of Hyperparameters in Deep Neural Networks',
+              description: 'This paper presents a brief study on Hyperparameter Optimization methods in Deep Learning models focused on data classification. One of the great challenges when working with models of deep learning is the difficulty of finding the best configuration of the hyperparameters of these models, that is, which combination of values is the most adequate to obtain the best performance of the learning algorithm during training.',
+              tags: ['Python', 'Tensorflow', 'Pandas'],
+              type: 'article',
+              link: this.folderFile + 'Monografia_TFG.pdf',
+              image: this.folderImage + 'Optimization.png'
+            },
+            {
+              nome: 'Workshop Tensorflow',
+              description: 'This workshop is intended for an audience that is new to Tensorflow with a very basic knowledge in Machine Learning. It is part of the Hackathon Retail 4.0 2018 held at the Federal University of Itajubá - UNIFEI. The challenge of this Hackathon is to use the techniques of artificial intelligence and programming in Python to solve problems of retail 4.0. In the end a company brings problems to solve in groups that compete for the best solution.',
+              tags: ['Python', 'Tensorflow', 'Pandas'],
+              type: 'Workshop',
+              link: 'https://github.com/Carlos-Henreis/tensorflow-workshop',
+              image: this.folderImage + 'work.jpg'
+            },
+            {
+              nome: 'Laravel VueJS',
+              description: 'While Laravel does not dictate which JavaScript or CSS pre-processors you use, it does provide a basic starting point using Bootstrap and Vue that will be helpful for many applications. By default, Laravel uses NPM to install both of these frontend packages.',
+              tags: ['VueJS', 'PHP', 'Laravel', 'Vuetify'],
+              type: 'Code',
+              link: 'https://github.com/Carlos-Henreis/Laravel_VueJS',
+              image: this.folderImage + 'latavel.jpg'
+            },
+            {
+              nome: 'Digit recognition',
+              description: 'Building a small neural network to recognize handwritten numbers using TensorFlow',
+              tags: ['Python', 'html5lib', 'protobuf', 'scikit-learn', 'tensorflow'],
+              type: 'Code',
+              link: 'https://github.com/Carlos-Henreis/PDI',
+              image: this.folderImage + 'mnist-input.png'
+            },
+            {
+              nome: 'Motion of the galaxy',
+              description: 'Calculates the position of the stars of a galaxy according to the time',
+              tags: ['Python', 'numpy', 'Matplotlib'],
+              type: 'Code',
+              link: 'https://github.com/Carlos-Henreis/galaxia',
+              image: this.folderImage + 'galaxia.gif'
+            }
+          ]
+        }
+      },
+      props: {
+        folderFile: {
+          type: String,
+          default: ''
+        },
+        active: {
+          type: Number,
+          default: ''
+        }
+      },
+      computed: {
+        resumeFileEn () {
+          return this.folderFile + 'curriculum-vitae-en-Carlos-Reis.pdf';
+        },
+        resumeFileBr () {
+          return this.folderFile + 'curriculum vitae-br-Carlos-Reis.pdf';
+        }
+      },
+      methods: {
+
+      },
+      mounted () {
+
+      }
+    });
+
     Vue.component('horizontal-bar-chart', {
       extends: VueChartJs.HorizontalBar,
       mixins: [VueChartJs.mixins.reactiveProp],
@@ -1009,7 +1141,7 @@
     Vue.component('app-hobbies', {
       template: `
           <v-flex xs12 text-xs-center id="hobbies" v-scroll="onScroll">
-          <v-card>
+          <v-card color="grey lighten-2">
             <v-card-title primary-title class="justify-center">
               <h1 class="display-2 mb-1">HOBBIES</h1>
             </v-card-title>
@@ -1282,7 +1414,7 @@
           folderFile: 'https://carlos-henreis.github.io/files/',
           drawer: false,
           active: 0,
-          list: ['aboutMe', 'academic', 'professionalExperience', 'interests', 'hobbies'],
+          list: ['aboutMe', 'academic', 'professionalExperience', 'interests', 'projects', 'hobbies'],
           currentOffset: 0
         }
       },
