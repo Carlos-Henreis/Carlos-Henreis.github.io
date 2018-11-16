@@ -1,0 +1,75 @@
+{
+  "swagger" : "2.0",
+  "info" : {
+    "description" : "API ANEEL - Reclamação de Falta de Energia",
+    "version" : "1.0.0",
+    "title" : "API ANEEL",
+    "contact" : {
+      "email" : "carlos.henrique@smarkio.com.br"
+    }
+  },
+  "tags" : [ {
+    "name" : "chat",
+    "description" : "Chamadas necessárias para o chat aneel"
+  }, {
+    "name" : "cliente",
+    "description" : "Chamadas feitas na api do cliente"
+  } ],
+  "paths" : {
+    "/" : {
+      "get" : {
+        "tags" : [ "chat" ],
+        "summary" : "GetUfCidadeConcessionario",
+        "operationId" : "GetUfCidadeConcessionario",
+        "description" : "Lista todas/ ou retorna a quantide as distribuidoras de um determinado UF\n",
+        "produces" : [ "application/json" ],
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "codUf",
+          "description" : "Código do UF que se deseja pesquisar (Ex- SP, MG)",
+          "required" : true,
+          "type" : "string"
+        }, {
+          "in" : "query",
+          "name" : "getTotal",
+          "description" : "Parametro responsável por controlar o tipo de retorno. Se 0 retorna a quantidade se 1 retorna uma lista de distribuidoras",
+          "required" : true,
+          "type" : "integer",
+          "enum" : [ 0, 1 ]
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Lista ou quatidade de Distribuidoras por UF",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/distribuidora"
+              }
+            }
+          },
+          "400" : {
+            "description" : "bad input parameter"
+          }
+        }
+      }
+    }
+  },
+  "definitions" : {
+    "distribuidora" : {
+      "type" : "object",
+      "properties" : {
+        "label" : {
+          "type" : "string",
+          "example" : "Companhia Energética de Minas Gerais"
+        },
+        "value" : {
+          "type" : "integer",
+          "example" : 47
+        }
+      }
+    }
+  },
+  "schemes" : [ "https" ],
+  "host" : "api.altu.com.br",
+  "basePath" : "/aneel"
+}
