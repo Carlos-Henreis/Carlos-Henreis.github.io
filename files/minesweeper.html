@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta data-n-head="true" charset="utf-8"/>
+  <meta data-n-head="true" name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta data-n-head="true"
+    data-hid="description"
+    name="description"
+    content="Draggable blur mask over image (use canvas vue/vuetify)"
+  />
+  <meta data-n-head="true" data-hid="og:title" property="og:title" content="Carlos Henrique Reis | Mines Weeper"/>
+  <meta data-n-head="true" data-hid="og:site_name" property="og:site_name" content="Carlos Henrique Reis | Mines Weeper"/>
+  <meta data-n-head="true" data-hid="og:url" property="og:url" content="https://carlos-henreis.github.io/files/minesweeper.html"/>
+  <meta data-n-head="true" data-hid="og:image" property="og:image" content="https://carlos-henreis.github.io/files/images/mine.png"/>
+  <meta data-n-head="true" data-hid="og:description" property="og:description" content="Mines Weeper game (use canvas vue/vuetify)"/>
+  <title>Carlos Henrique Reis | Mines Weeper Game</title>
+  <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+  <link href="https://use.fontawesome.com/releases/v5.0.6/css/all.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@1.4.3/dist/vuetify.min.css" rel="stylesheet">
+</head>
+<body>
+  <div id="app">
+    <v-app id="inspire">
+      <div>
+        <v-stepper alt-labels v-model="e1">
+          <v-stepper-items>
+            <v-stepper-content step="1" >
+              <v-card
+                class="mb-5"
+                color="lighten-1"
+              >
+                <v-flex xs12 text-xs-center>
+                  <v-card>
+                    <v-card-title primary-title class="text-xs-center">
+                      <v-container grid-list-md text-xs-center>
+                        <h3 class="display-1 mb-3">Select difficulty level</h3>
+                      </v-container>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-flex xs12>
+                        <v-card>
+                          <v-container grid-list-md text-xs-center>
+                            <v-layout row wrap>
+                              <v-flex xs12 sm6 lg6 d-flex
+                                v-for="level in difficulty_level"
+                                :key="level.name"
+                              >
+                                <v-card hover ripple height="width" @click="nextStep(1, level)">
+                                  <v-card-text>
+                                    <h3 v-html="level.name" class="mb-2"></h3>
+                                  </v-card-text>
+                                </v-card>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                        </v-card>
+                      </v-flex>
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+              </v-card>
+            </v-stepper-content>
+
+            <v-stepper-content step="2" >
+                <v-flex xs12 text-xs-center>
+                  <v-card>
+                    <v-card-title primary-title class="text-xs-center">
+                      <v-container grid-list-md text-xs-center>
+                        <h3 class="display-1 mb-3">Mines Weeper</h3>
+                      </v-container>
+                    </v-card-title>
+                    <v-card-text>
+                      <v-flex xs12>
+                          <v-container grid-list-md text-xs-center>
+                            <v-layout row wrap>
+                              <v-flex md8 xs12>
+                                <v-flex v-for="d in height" :key="d" class="m-0 pa-0">
+                                  <v-btn-toggle class="m-0 pa-0" multiple v-model="m_field_selected">
+                                    <v-btn
+                                      block outline flat
+                                      v-for="n in width"
+                                      :key="n+d"
+                                      class="pa-1"
+                                      @click.native.prevent="clicked_field_left(d-1, n-1)"
+                                      @contextmenu.native.prevent="clicked_field_right(d-1, n-1)"
+                                    >
+                                      <v-icon
+                                        :color="pauseGame ? 'black' :(color_fields[d-1] && color_fields[d-1][n-1] ? color_fields[d-1][n-1] : 'black')"
+                                      >{{pauseGame ? 'pause_circle_filled' :(fields_icons[d-1] && fields_icons[d-1][n-1] ? fields_icons[d-1][n-1] : "") }}</v-icon>
+                                    </v-btn>
+                                  </v-btn-toggle>
+                                </v-flex>
+                              </v-flex>
+                              <v-flex md4 xs12 text-xs-left>
+                                <v-container grid-list-md>
+                                  <v-layout row wrap>
+                                    <v-flex md12 xs6>
+                                      <v-icon large>flag</v-icon><br>
+                                      <b>{{pauseGame ? "?" : real_mines-total_flags}}/{{real_mines}}</b>
+                                    </v-flex>
+                                    <v-flex md12 xs6>
+                                      <v-icon large>timer</v-icon><br>
+                                      <span class="time">{{ time }}
+                                    </v-flex>
+                                    <v-flex xs12 class="text-xs-left">
+                                      <v-flex class="ml-0">
+                                        <v-flex class="ml-0">
+                                          <v-btn class="ml-0" small color="primary" @click="dialogReset=true; pauseG()">Restart</v-btn>
+                                        </v-flex>
+                                        <v-flex class="ml-0">
+                                          <v-btn class="ml-0" small color="primary" @click="nextStep(0)">Alter Level</v-btn>
+                                        </v-flex>
+                                        <v-flex class="ml-0">
+                                          <v-btn
+                                            class="ml-0"
+                                            small color="primary"
+                                            @click="pauseGame ? startGame() : pauseG()"
+                                          >
+                                            {{pauseGame ? "Start" : "Pause"}}
+                                          </v-btn>
+                                        </v-flex>
+                                      </div>
+                                    </v-flex>
+                                  <v-layout>
+                                <v-container>
+                              </v-flex>
+                            </v-layout>
+                          </v-container>
+                      </v-flex>
+                    </v-card-text>
+                  </v-card>
+                </v-flex>
+            </v-stepper-content>
+          </v-stepper-items>
+        </v-stepper>
+        <v-footer class="pa-3 justify-center" >
+          <span>Made with <a class="black--text" href="https://vuetifyjs.com" target="_blank">Vuetify</a> & <a class="black--text" href="https://vuejs.org">VueJs</a> by <a class="black--text" href="https://github.com/Carlos-Henreis/">Carlos-Henreis</a> — &copy; {{ new Date().getFullYear() }}</span>
+        </v-footer>
+        <v-dialog v-model="dialog" persistent max-width="600px">
+          <v-card>
+            <v-card-title>
+              <span class="headline">Custom</span>
+            </v-card-title>
+            <v-card-text>
+              <v-card>
+                <v-container
+                  fluid
+                  grid-list-md
+                >
+                  <v-layout row wrap>
+                    <v-flex xs12>
+                      <v-subheader class="pl-0"><h4>Height {{messageHeight}}</h4></v-subheader>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        v-model="height"
+                        :rules="[rules.max, rules.min]"
+                        append-outer-icon="settings_overscan"
+                        type="number"
+                      ></v-text-field>
+                    </v-flex>
+
+                    <v-flex xs12>
+                      <v-subheader class="pl-0"><h4>Width {{messageWidth}}</h4></v-subheader>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-text-field
+                        v-model="width"
+                        :rules="[rules.max, rules.min]"
+                        append-outer-icon="settings_overscan"
+                        type="number"
+                      ></v-text-field>
+                    </v-flex>
+
+                    <v-flex xs12>
+                      <v-subheader class="pl-0"><h4>Mines {{messageMine}}</h4></v-subheader>
+                    </v-flex>
+                    <v-flex xs12>
+                      <v-slider
+                        v-model="mine_percentagem"
+                        :max="40"
+                        :min="4"
+                        thumb-label
+                      ></v-slider>
+                    </v-flex>
+
+                  </v-layout>
+                </v-container>
+              </v-card>
+            </v-card-text>
+            <v-card-actions>
+              <v-spacer></v-spacer>
+            <v-btn color="red darken-1" flat @click="dialog = false">Cancel</v-btn>
+            <v-btn color="blue darken-1" flat @click="customDialog()">Start Game</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="dialogReset"
+        persistent
+        width="300"
+      >
+        <v-card
+          color="primary"
+          dark
+        >
+          <v-card-text>
+            <v-list-tile
+              avatar
+            >
+              <v-list-tile-avatar>
+                <v-icon large>live_help</v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>Start a new game?</v-list-tile-title>
+                <v-list-tile-sub-title>
+                  If you start a new game, your<br> current progress will be lost.
+                </v-list-tile-sub-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-card-text>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="red darken-1" @click="dialogReset = false; startGame()">Cancel</v-btn>
+            <v-btn color="green darken-1" @click="resetGame()">reset</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+
+      <v-dialog
+        v-model="dialogChampion"
+        persistent
+        width="300"
+      >
+        <v-card
+          color="green darken-4"
+          dark
+        >
+          <v-card-text>
+            <v-container grid-list-md text-xs-center>
+              <v-layout row wrap>
+                <v-flex xs12>
+                  <v-icon large>fas fa-smile-wink</v-icon>
+                </v-flex>
+                <v-flex d-flex xs12>
+                  <v-flex xs6>
+                    <v-icon right>fa fa-trophy</v-icon>Congratulations!!
+                  </v-flex>
+                  <v-divider
+                    class="mx-3"
+                    inset
+                    vertical
+                  ></v-divider>
+                  <v-flex xs6>
+                    <v-icon left>timer</v-icon>{{time}}
+                  </v-flex>
+                </v-flex>
+              </v-layout>
+            </v-container>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn round color="light-green accent-4" light block @click="dialogChampion = false; nextStep(0)"><v-icon left>refresh</v-icon>Try again</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      <v-dialog
+        v-model="dialogLoss"
+        persistent
+        width="300"
+      >
+        <v-card
+          color="red darken-4"
+          dark
+        >
+          <v-card-text>
+            <v-list-tile
+              avatar
+            >
+              <v-list-tile-avatar>
+                <v-icon large>cancel  </v-icon>
+              </v-list-tile-avatar>
+              <v-list-tile-content>
+                <v-list-tile-title>You lose the game!!</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+          </v-card-text>
+          <v-card-actions>
+            <v-btn dark round color="red accent-4" light block @click="dialogLoss = false; nextStep(0)"><v-icon left>refresh</v-icon>Try again</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
+
+      </div>
+    </v-app>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@1.4.3/dist/vuetify.min.js"></script>
+  <script>
+
+  new Vue({
+    el: '#app',
+    data () {
+      return {
+        dialogLoss: false,
+        dialogChampion: false,
+        pauseGame: false,
+        time: '00:00:00.000',
+        timeBegan: null,
+        timeStopped: null,
+        stoppedDuration: 0,
+        started: null,
+        running: false,
+        icon_details: [],
+        color_fields: [],
+        real_mines: 0,
+        pos_flags: [],
+        total_flags: 0,
+        blanck_fields: [],
+        m_field_selected: [],
+        field_selected: [],
+        field_selected_paused: [],
+        pos_mines: [],
+        fields_icons: [],
+        mine_percentagem: 4,
+        mines: 1,
+        height: 4,
+        width: 4,
+        dialog: false,
+        dialogReset: false,
+        e1: 1,
+        steps: [
+          { name: "select difficulty" },
+          { name: "MineSweeper Game"}
+        ],
+        level_selected: {},
+        difficulty_level: [
+          {
+            name: '<p>8x8</p><p>mines 10</p>',
+            mines: 10,
+            height: 8,
+            width: 8,
+            level: 'ease'
+          },
+          {
+            name: '<p>16x8</p><p>mines 22</p>',
+            mines: 22,
+            height: 16,
+            width: 8,
+            level: 'medium'
+          },
+          {
+            name: '<p>16x16</p><p>mines 40</p>',
+            mines: 40,
+            height: 16,
+            width: 16,
+            level: 'expert'
+          },
+          {
+            name: '<p>Custom</p><p>?</p>',
+            mines: -1,
+            height: -1,
+            width: -1,
+            level: 'custom'
+          }
+        ],
+        rules: {
+          max: value => parseInt(value) <= 16 || 'Value less than or equal to 64 mines',
+          min: value => parseInt(value) >= 4 || 'Value greater than or equal to 4 mines'
+        }
+      }
+    },
+
+    computed: {
+      messageMine: function () {
+        return (this.mine_percentagem > 0) ? ": "+this.mine_percentagem+"% ("+this.mines+" mines)" : ""
+      },
+      messageHeight: function () {
+        return (this.height > 0) ? ": "+this.height+" fields" : ""
+      },
+      messageWidth: function () {
+        return (this.width > 0) ? ": "+this.width+" fields" : ""
+      }
+    },
+
+    watch: {
+      mine_percentagem (val) {
+        this.mines = parseInt(((this.height * this.width) * val) / 100)
+      },
+      steps (val) {
+        if (this.e1 > val) {
+          this.e1 = val
+        }
+      },
+      mines (val) {
+        if (val == 0) this.mines = 1;
+      },
+      height (val) {
+        this.height = parseInt(this.height)
+        if (!this.height) {
+          this.height = 0
+        }
+        this.maxMinHeight(16, 4, val);
+        this.mines = parseInt(((this.height * this.width) * this.mine_percentagem) / 100)
+      },
+      width (val) {
+        this.width = parseInt(this.width)
+        if (!this.width) {
+          this.width = 0
+        }
+        this.maxMinWidth(16, 4, val);
+        this.mines = parseInt(((this.height * this.width) * this.mine_percentagem) / 100)
+      }
+    },
+
+    methods: {
+      startCron(){
+        if(this.running) return;
+        if (this.timeBegan === null) {
+          this.resetCron();
+          this.timeBegan = new Date();
+        }
+
+        if (this.timeStopped !== null) {
+          this.stoppedDuration += (new Date() - this.timeStopped);
+        }
+        this.started = setInterval(this.clockRunning, 10);
+        this.running = true;
+      },
+
+      stopCron() {
+        this.running = false;
+        this.timeStopped = new Date();
+        clearInterval(this.started);
+      },
+
+      resetCron() {
+        this.running = false;
+        clearInterval(this.started);
+        this.stoppedDuration = 0;
+        this.timeBegan = null;
+        this.timeStopped = null;
+        this.time = "00:00:00.000";
+      },
+
+      clockRunning(){
+        var currentTime = new Date()
+        let timeElapsed = new Date(currentTime - this.timeBegan - this.stoppedDuration)
+        let hour = timeElapsed.getUTCHours()
+        let min = timeElapsed.getUTCMinutes()
+        let sec = timeElapsed.getUTCSeconds()
+        let ms = timeElapsed.getUTCMilliseconds()
+
+        this.time =
+          this.zeroPrefix(hour, 2) + ":" +
+          this.zeroPrefix(min, 2) + ":" +
+          this.zeroPrefix(sec, 2) + "." +
+          this.zeroPrefix(ms, 3);
+      },
+
+      zeroPrefix(num, digit) {
+        var zero = '';
+        for(var i = 0; i < digit; i++) {
+          zero += '0';
+        }
+        return (zero + num).slice(-digit);
+      },
+
+      pauseG(){
+        this.stopCron()
+        this.pauseGame = true
+
+        let temp_icons = []
+        temp_icons = Object.assign([], temp_icons, this.field_selected)
+        this.field_selected = Object.assign([], this.field_selected, this.field_selected_paused)
+        this.field_selected_paused = Object.assign([], this.field_selected_paused, temp_icons)
+      },
+
+      startGame(){
+        this.startCron()
+        this.pauseGame = false
+        let temp_icons = []
+        temp_icons = Object.assign([], temp_icons, this.field_selected_paused)
+        this.field_selected_paused = Object.assign([], this.field_selected_paused, this.field_selected)
+        this.field_selected = Object.assign([], this.field_selected, temp_icons)
+      },
+
+      resetGame(){
+        this.pauseGame = false
+        this.resetCron()
+        this.pos_flags = []
+        this.color_fields = []
+        this.icon_details = {}
+        this.total_flags = 0
+        this.real_mines = 0
+        this.blanck_fields = []
+        this.fields_icons = []
+        this.field_selected = []
+        this.field_selected_paused = []
+        this.pos_mines = []
+        this.total_flags = 0
+        this.real_mines = 0
+        if (this.level_selected.level === "custom") {
+          this.addIcons(parseInt(this.height),parseInt(this.width), "small"),
+          this.insertBombs(parseInt(this.height),parseInt(this.width), this.mines)
+        } else {
+          this.mines = this.level_selected.mines
+          this.height = parseInt(this.level_selected.height)
+          this.width = parseInt(this.level_selected.width)
+          this.addIcons(this.height,this.width, "small")
+          this.insertBombs(parseInt(this.height),parseInt(this.width), this.mines)
+        }
+        this.startCron()
+        this.dialogReset = false
+      },
+
+      isSelected (h, w) {
+        return this.field_selected[h].indexOf(w) != -1
+      },
+
+      isSelectedBlanck (h, w) {
+        return this.blanck_fields[h].indexOf(w) != -1
+      },
+
+      isMineOrNumber (h, w) {
+        return this.pos_mines[h][w] != 0
+      },
+      nearBlank(near) {
+        let that = this
+        return near.filter(function(n){
+          return that.celulaExiste(n[0], n[1]) && !that.isMineOrNumber(n[0], n[1]) && !that.isSelectedBlanck(n[0], n[1])
+        })
+      },
+      nearVisited(near) {
+        let that = this
+        let nearsVisited = near.map(function(n) {
+          return (that.celulaExiste(n[0], n[1]) && that.isSelected(n[0], n[1]))
+        })
+        return nearsVisited.indexOf(false)==-1
+      },
+      unlockNear(h, w) {
+        let vizinhos = [
+					[h-1,w],
+					[h+1,w],
+					[h,w+1],
+					[h,w-1],
+					[h-1,w-1],
+					[h+1,w+1],
+					[h-1,w+1],
+					[h+1,w-1]
+        ]
+        if (this.nearVisited(vizinhos)){
+          return;
+        }
+
+        let line = this.blanck_fields[h]
+        if (line.indexOf(w)==-1) {
+           line.push(w);
+           Object.assign(this.blanck_fields[h], line)
+        }
+
+        //Pinta os vizinhos
+        let that = this
+        vizinhos.forEach(function(v) {
+          if (that.celulaExiste(v[0], v[1]) && (!that.isSelected(v[0], v[1]) || that.fields_icons[v[0]][v[1]] === "flag")) {
+            //é flag
+            if (that.fields_icons[v[0]][v[1]] === "flag") {
+              let index = that.pos_flags.findIndex(function(a) {
+                return a[0] === v[0] &&  a[1] === v[1]
+              })
+              that.pos_flags.slice(index, 1)
+              that.total_flags += 1
+            }
+
+            if (that.isMineOrNumber(v[0], v[1])) {
+              let icon = that.pos_mines[v[0]][v[1]] > -1 ? "filter_"+that.pos_mines[v[0]][v[1]]  : "wb_sunny"
+              that.$set(that.fields_icons[v[0]], [v[1]], icon)
+            } else {
+              that.$set(that.fields_icons[v[0]], [v[1]], "minimize")
+              that.$set(that.color_fields[v[0]], [v[1]], "white")
+            }
+            let line = that.field_selected[v[0]]
+            if (line.indexOf(v[1])==-1) {
+               line.push(v[1]);
+               Object.assign(that.field_selected[v[0]], line)
+            }
+          }
+        })
+        let blanks = this.nearBlank(vizinhos)
+        blanks.forEach(function(b) {
+          that.unlockNear(b[0], b[1])
+        })
+      },
+
+      showAll (h, w) {
+        let that = this
+
+        this.pos_mines.forEach(function(line, indexL) {
+          let line2 = that.field_selected[indexL]
+          line.forEach(function(col, indexC) {
+            if (line2.indexOf(indexC)==-1) line2.push(indexC);
+            let icon = ""
+            let color = ""
+            if (that.isMineOrNumber(indexL, indexC)) {
+              if (indexL === h && indexC === w) {
+                //Add vermelho
+                color="red darken-2"
+              }
+              else {
+                color="black"
+              }
+              icon = that.pos_mines[indexL][indexC] > -1 ? "filter_"+that.pos_mines[indexL][indexC]  : "wb_sunny"
+            } else {
+              color="white"
+              icon = "minimize"
+            }
+            that.$set(that.color_fields[indexL], [indexC], color)
+            that.$set(that.fields_icons[indexL], [indexC], icon)
+          })
+          that.$set(that.field_selected, [indexL], line2)
+        })
+      },
+      thisChampion(){
+        let total_selected = 0;
+
+        let that = this
+        this.field_selected.forEach(function(line) {
+          total_selected += line.length
+        })
+
+        return this.width*this.height === total_selected
+      },
+      clicked_field_left (h, w) {
+        //MUITA COISA AQUI AINDA
+        this.m_field_selected = []
+        if (!this.isSelected(h, w)) {
+          if (this.fields_icons[h][w] === "flag") {
+            return
+          } else if (this.isMineOrNumber(h, w)) {
+            let icon = this.pos_mines[h][w] > -1 ? "filter_"+this.pos_mines[h][w]  : "wb_sunny"
+            this.$set(this.fields_icons[h], [w], icon)
+            //Se Fudeu
+            if (icon === "wb_sunny") {
+              this.showAll(h, w)
+              this.stopCron()
+              this.dialogLoss = true
+              return
+            }
+          } else {
+            this.unlockNear(h, w)
+            this.$set(this.fields_icons[h], [w], "minimize")
+            this.$set(this.color_fields[h], [w], "white")
+          }
+
+          let line = this.field_selected[h]
+
+          if (line.indexOf(w)==-1) line.push(w);
+
+          this.$set(this.field_selected, [h], line)
+          if (this.thisChampion()) {
+            this.dialogChampion = true
+            this.stopCron()
+          }
+        }
+
+      },
+      clicked_field_right (h, w) {
+        if (this.fields_icons[h][w] === "flag" && !this.thisChampion()) {
+          this.$set(this.fields_icons[h], [w], "blur_on")
+          let index = this.pos_flags.findIndex(function(a) {
+            return a[0] === h &&  a[1] === w
+          })
+          if (index > -1){
+            this.pos_flags.slice(index, 1)
+            this.total_flags += 1
+          }
+          let line = this.field_selected[h]
+          let selected_index = line.indexOf(w)
+          if (selected_index!=-1) line.splice(selected_index, 1);
+          this.$set(this.field_selected, [h], line)
+
+          return
+        }
+        else if ((this.total_flags <= 0) || (this.isSelected(h, w))) {
+          return
+        }
+        this.$set(this.fields_icons[h], [w], "flag")
+        let line = this.pos_flags[h]
+        this.pos_flags.push([h, w])
+        this.total_flags -= 1
+
+        let line_selected = this.field_selected[h]
+
+        if (line_selected.indexOf(w)==-1) line_selected.push(w);
+        this.$set(this.field_selected, [h], line_selected)
+
+        if (this.thisChampion()) {
+          this.dialogChampion = true
+          this.stopCron()
+        }
+      },
+      maxMinHeight(max, min, val) {
+        if (parseInt(val) > max) {
+          this.height = max;
+        } else if (parseInt(val) < min) {
+          this.height = min;
+        }
+      },
+      maxMinWidth(max, min, val) {
+        if (parseInt(val) > max) {
+          this.width = max;
+        } else if (parseInt(val) < min) {
+          this.width = min;
+        }
+      },
+      onInput (val) {
+        this.steps = parseInt(val)
+      },
+      customDialog () {
+        this.addIcons(parseInt(this.height),parseInt(this.width), "small"),
+        this.insertBombs(parseInt(this.height),parseInt(this.width), this.mines)
+        this.startCron()
+        this.e1 = 2
+        this.dialog=false
+      },
+      nextStep (n, level={level: 'medium'}) {
+        if (n == 0) {
+          this.pauseGame = false
+          this.resetCron()
+          this.pos_flags = []
+          this.level_selected = {}
+          this.color_fields = []
+          this.icon_details = {}
+          this.total_flags = 0
+          this.real_mines = 0
+          this.blanck_fields = []
+          this.mine_percentagem= 4
+          this.mines = 1
+          this.height = 4
+          this.width = 4
+          this.fields_icons = []
+          this.field_selected = []
+          this.field_selected_paused = []
+          this.pos_mines = []
+          this.e1 = 1
+        } else {
+          this.level_selected = level
+          if (this.level_selected.level === "custom") {
+            this.dialog = true;
+          }
+          else{
+            this.mines = this.level_selected.mines
+            this.total_flags = 0
+            this.real_mines = 0
+            this.height = parseInt(this.level_selected.height)
+            this.width = parseInt(this.level_selected.width)
+            this.addIcons(this.height,this.width, "small")
+            this.insertBombs(parseInt(this.height),parseInt(this.width), this.mines)
+            this.startCron()
+            this.e1 = n + 1
+          }
+        }
+      },
+      shuffle(arra1) {
+          var ctr = arra1.length, temp, index;
+          while (ctr > 0) {
+              index = Math.floor(Math.random() * ctr)
+              ctr--
+              temp = arra1[ctr]
+              arra1[ctr] = arra1[index]
+              arra1[index] = temp
+          }
+          return arra1
+      },
+      sortMines(h, w, mines) {
+        let fields = [...Array(h*w)].map((_,i) => i)
+        let field_selected_mines = this.shuffle(fields)
+        field_selected_mines = field_selected_mines.slice(0, mines)
+
+        return field_selected_mines.reduce((init, current) => {
+          let posy = current%w
+          let posx = parseInt(current/w)
+          init.push([posx, posy])
+          return init
+        }, [])
+      },
+
+      eBomba(h, w) {
+        return this.pos_mines[h][w] == -1;
+      },
+
+
+      celulaExiste(h, w) {
+        return (h<this.height && w<this.width) && (h > -1 && w > -1);
+      },
+
+      insertBomb(h, w) {
+        this.total_flags += 1
+        this.real_mines += 1
+        this.pos_mines[h][w] = -1;
+		    let vizinhos = [
+					[h-1,w],
+					[h+1,w],
+					[h,w+1],
+					[h,w-1],
+					[h-1,w-1],
+					[h+1,w+1],
+					[h-1,w+1],
+					[h+1,w-1]
+        ];
+        let that = this
+        vizinhos.forEach(function(i) {
+          if(that.celulaExiste(i[0],i[1])){
+    				if(!that.eBomba(i[0],i[1])){
+    					that.pos_mines[i[0]][i[1]]++;
+    				}
+          }
+  			})
+      },
+
+      insertBombs(h, w, mines) {
+        let field = []
+        for (var i = 0; i < h; i++) {
+          field.push([...Array(w)].map(function(pos) {return 0}))
+        }
+
+
+        Object.assign(this.pos_mines, field)
+
+        let mines_f = this.sortMines(h, w, mines)
+
+        let that = this
+
+        this.total_flags =0
+        this.real_mines = 0
+
+        mines_f.forEach(function(i) {
+          console.log(i);
+          that.insertBomb(i[0], i[1])
+        })
+
+        console.log(this.pos_mines)
+
+      },
+
+      addIcons(h, w, tam) {
+        var value_tam= tam === "small"? true : false
+        this.icon_details = {
+          "small": tam,
+          "large": !tam
+        }
+        for (var i = 0; i < h; i++) {
+          Object.assign(this.color_fields, this.color_fields.push([...Array(w)].map((_,i) => "black")))
+          Object.assign(this.fields_icons, this.fields_icons.push([...Array(w)].map((_,i) => "blur_on")))
+          Object.assign(this.field_selected_paused, this.field_selected_paused.push([...Array(w)].map((_,i) => i)))
+          Object.assign(this.field_selected, this.field_selected.push([]))
+          Object.assign(this.blanck_fields, this.blanck_fields.push([]))
+        }
+      }
+    }
+  })
+  </script>
+  <style>
+  </style>
+</body>
+</html>
