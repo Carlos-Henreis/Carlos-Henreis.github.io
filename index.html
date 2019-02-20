@@ -1337,7 +1337,7 @@
           loading: false,
           end: false,
           access_token: "1476919210.1677ed0.4254aa27c4eb4e2b9c39253d87df5444",
-          url: "https://api.instagram.com/v1/self/media/recent",
+          url: "https://api.instagram.com/v1/users/self/media/recent",
           username: "",
           grams: [],
           next_url: '',
@@ -1355,11 +1355,13 @@
       methods: {
         getPosts () {
           this.loading = true
-          axios.get(this.url + "?access_token=" + this.access_token, {headers: {'Access-Control-Allow-Origin': '*'},}).then(response => {
-            this.grams = response.data.data
-            this.username = response.data.data[0].user.username
-            this.next_url = response.data.pagination.next_url
-            this.loading = false
+          let that = this
+          axios.get('https://api.instagram.com/v1/users/self/media/recent?access_token=1476919210.1677ed0.4254aa27c4eb4e2b9c39253d87df5444')
+          .then(function(response){
+            that.grams = response.data.data
+            that.username = response.data.data[0].user.username
+            that.next_url = response.data.pagination.next_url
+            that.loading = false
           })
         },
         getMorePosts () {
