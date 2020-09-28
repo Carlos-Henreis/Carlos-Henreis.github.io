@@ -660,7 +660,61 @@
                         <v-card-title>
                           <span class="title text-xs-left">
                             <b><v-icon left>business_center</v-icon> Software developer</b></br>
-                            <v-icon left>date_range</v-icon> September 2018 - currently</br>
+                            <v-icon left>date_range</v-icon> June 2020 - currently</br>
+                            <v-icon left>business</v-icon>MOVA Peer-To-Peer Lending - Investimentos e Financiamentos</br>
+                          </span>
+                        </v-card-title>
+                        <v-card-text class="ml-3 text-xs-left subheading">
+                          <p>
+                            <v-icon>keyboard_arrow_right</v-icon>
+                            Responsible for development in MOVA Peer-To-Peer Lending. Mova is a fintech specialists in online investments and financing based on Peer-To-Peer Lending
+                          </p>
+                          <p>
+                            <v-icon>keyboard_arrow_right</v-icon>
+                            Using the following technologies:
+                            <ul class="ml-3">
+                              <li>PHP</li>
+                              <li>TDD e BDD</li>
+                              <li>Docker</li>
+                              <li>GCloud</li>
+                            </ul>
+                          </p>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+                    <v-flex xs12 md6 d-flex>
+                      <v-card elevation-4 light>
+                        <v-card-title>
+                          <span class="title text-xs-left">
+                            <b><v-icon left>business_center</v-icon> Tech Lead Machine Learning</b></br>
+                            <v-icon left>date_range</v-icon> November 2019 ‒ June 2020</br>
+                            <v-icon left>business</v-icon>Smarkio Tecnologia Ltda, Itajubá-Brazil</br>
+                          </span>
+                        </v-card-title>
+                        <v-card-text class="ml-3 text-xs-left subheading">
+                          <p>
+                            <v-icon>keyboard_arrow_right</v-icon>
+                           Tech Lead Machine Learning in the Natural Language Processing area. Conducting descriptive, diagnostic, predictive and/or prescriptive analyzes, creating and applying statistical models, machine learning and optimizers for the identification, recommendation and implementation of opportunities for improvement in the NLP process in chatbots and creation of metrics and monitoring of performance of the solutions created
+                          </p>
+                          <p>
+                            <v-icon>keyboard_arrow_right</v-icon>
+                            Using the following technologies:
+                            <ul class="ml-3">
+                              <li>Python</li>
+                              <li>Watson Assistant</li>
+                              <li>IBM Cloud</li>
+                              <li>DialogFlow</li>
+                            </ul>
+                          </p>
+                        </v-card-text>
+                      </v-card>
+                    </v-flex>
+                    <v-flex xs12 md6 d-flex>
+                      <v-card elevation-4 light>
+                        <v-card-title>
+                          <span class="title text-xs-left">
+                            <b><v-icon left>business_center</v-icon> Software developer</b></br>
+                            <v-icon left>date_range</v-icon> ‒ August 2018 ‒ November 2019</br>
                             <v-icon left>business</v-icon>Smarkio Tecnologia Ltda, Itajubá-Brazil</br>
                           </span>
                         </v-card-title>
@@ -1261,6 +1315,48 @@
                       >
                         <v-layout row wrap>
                           <v-flex
+                            xs12
+                          >
+                            <v-card>
+                              <v-container grid-list-md text-xs-center>
+                                <v-layout row wrap>
+                                  <v-flex xs12 md5>
+                                    <v-avatar
+                                      size="125px"
+                                      color="grey lighten-4"
+                                    >
+                                      <img :src="ur_profile" alt="avatar">
+                                    </v-avatar>
+                                  </v-flex>
+                                  <v-flex xs12 md5>
+                                    <v-card-title primary-title>
+                                      <div>
+                                        <div class="headline">{{username}}</div>
+                                        <div><b>{{full_name}}</b></div>
+                                        <div style="white-space: pre-line">{{biography}}</div>
+                                        <div>
+                                          <v-container grid-list-md text-xs-center>
+                                            <v-layout row wrap>
+                                              <v-flex md3>
+                                                <div>{{count_pub}} posts</div>
+                                              </v-flex>
+                                              <v-flex md4>
+                                                <div>{{count_follow}} followers</div>
+                                              </v-flex>
+                                              <v-flex md4>
+                                                <div>{{count_followed_by}} followers</div>
+                                              </v-flex>
+                                            </v-layout>
+                                          </v-container>
+                                        </div>
+                                      </div>
+                                    </v-card-title>
+                                  </v-flex>
+                                </v-layout>
+                               </v-container>
+                            </v-card>
+                          </v-flex>
+                          <v-flex
                             v-for="(card, index) in grams"
                             md4 xs12
                             :key="index"
@@ -1268,7 +1364,7 @@
                             <v-card>
                               <v-card-media
                                 aspect-ratio="2.75"
-                                :src="card.images.standard_resolution.url"
+                                :src="card.node.thumbnail_resources[1].src"
                                 height="200px"
                               >
                                 <v-container
@@ -1278,7 +1374,7 @@
                                 >
                                   <v-layout fill-height>
                                     <v-flex xs12 align-end flexbox>
-                                      <span class="headline white--text" v-text="card.caption.text.split('#')[0].substring(0,40)+'...'"></span>
+                                      <span class="headline white--text" v-text="card.node.edge_media_to_caption.edges[0].node.text.split('#')[0].substring(0,40)+'...'"></span>
                                     </v-flex>
                                   </v-layout>
                                 </v-container>
@@ -1292,7 +1388,7 @@
                                     overlap
                                     slot="activator"
                                   >
-                                    <span slot="badge">{{card.tags.length}}</span>
+                                    <span slot="badge">{{card.node.edge_media_to_caption.edges[0].node.text.split('#').length-2 < 0 ? 0 : card.node.edge_media_to_caption.edges[0].node.text.split('#').length-2}}</span>
                                     <v-icon
                                       large
                                       color="green lighten-1"
@@ -1300,10 +1396,10 @@
                                       fas fa-hashtag
                                     </v-icon>
                                   </v-badge>
-                                  <span v-for="tag in card.tags">#{{tag}}</br></span>
+                                  <span v-for="tag in card.node.edge_media_to_caption.edges[0].node.text.split('#').slice(1, -1)">#{{tag}}</br></span>
                                 </v-tooltip>
                                 <v-badge left class="pr-3" overlap>
-                                  <span slot="badge">{{card.likes.count}}</span>
+                                  <span slot="badge">{{card.node.edge_media_preview_like.count}}</span>
                                   <v-icon
                                     large
                                     color="red lighten-1"
@@ -1312,7 +1408,7 @@
                                   </v-icon>
                                 </v-badge>
                                 <v-badge left overlap>
-                                  <span slot="badge">{{card.comments.count}}</span>
+                                  <span slot="badge">{{card.node.edge_media_to_comment.count}}</span>
                                   <v-icon
                                     large
                                     color="primary lighten-1"
@@ -1320,7 +1416,7 @@
                                     mode_comment
                                   </v-icon>
                                 </v-badge>
-                                <v-btn flat color="primary" dark :href="card.link" target="_blank">See on instagram</v-btn>
+                                <v-btn flat color="primary" dark :href="'https://www.instagram.com/p/'+card.node.shortcode+'/'" target="_blank">See on instagram</v-btn>
                               </v-card-actions>
                             </v-card>
                           </v-flex>
@@ -1345,11 +1441,17 @@
         return {
           loading: false,
           end: false,
-          access_token: "1476919210.1677ed0.4254aa27c4eb4e2b9c39253d87df5444",
-          url: "https://api.instagram.com/v1/users/self/media/recent",
+          url: "https://www.instagram.com/carlos.henrique.reis.98/?__a=1",
           username: "",
+          count_pub: 0,
+          count_follow: 0,
+          count_followed_by: 0,
           grams: [],
           next_url: '',
+          ur_profile: '',
+          biography: '',
+          full_name: '',
+          userId: null,
           error: false
         }
       },
@@ -1365,19 +1467,29 @@
         getPosts () {
           this.loading = true
           let that = this
-          axios.get('https://api.instagram.com/v1/users/self/media/recent?access_token=1476919210.1677ed0.4254aa27c4eb4e2b9c39253d87df5444')
+          axios.get(this.url)
           .then(function(response){
-            that.grams = response.data.data
-            that.username = response.data.data[0].user.username
-            that.next_url = response.data.pagination.next_url
+            that.grams = response.data.graphql.user.edge_owner_to_timeline_media.edges
+            console.log(response.data.graphql);
+            that.ur_profile = response.data.graphql.user.profile_pic_url_hd;
+            that.username = response.data.graphql.user.username;
+            that.biography = response.data.graphql.user.biography;
+            that.full_name = response.data.graphql.user.full_name;
+            that.count_pub = response.data.graphql.user.edge_owner_to_timeline_media.count;
+            that.count_follow = response.data.graphql.user.edge_follow.count;
+            that.count_followed_by = response.data.graphql.user.edge_followed_by.count;
+            that.next_url = response.data.graphql.user.edge_owner_to_timeline_media.page_info.end_cursor
+            that.userId = response.data.graphql.user.id
+
             that.loading = false
           })
         },
         getMorePosts () {
           this.loading = true
-          this.$http.get(this.next_url).then(response => {
-            this.grams = this.grams.concat(response.data.data)
-            this.next_url = response.data.pagination.next_url
+          this.$http.get('https://instagram.com/graphql/query/?query_id=17888483320059182&id='+this.userId+'&first=12&after='+this.next_url).then(response => {
+            console.log(response.data.data.user.edge_owner_to_timeline_media.edges);
+            this.grams = this.grams.concat(response.data.data.user.edge_owner_to_timeline_media.edges)
+            this.next_url = response.data.data.user.edge_owner_to_timeline_media.page_info.end_cursor
             this.loading = false
           })
         },
@@ -1388,7 +1500,7 @@
           if (((pageTop + (window.innerHeight - heightFooter)) == document.getElementById('footer').offsetTop) && !this.end) {
             if (typeof this.next_url === 'undefined') {
               this.end = true
-            } else if (typeof this.next_url === 'string' && this.next_url.length > 0) {
+            } else if (typeof this.next_url === 'string' && this.next_url.length > 0 && !this.loading) {
               this.getMorePosts()
             }
           }
